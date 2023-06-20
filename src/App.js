@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DefaultLayout from './components/Layouts/DefaultLayout';
 import Home from './pages/Home';
+import Reservation from './pages/Reservation';
 
 function App() {
     return (
@@ -12,6 +13,14 @@ function App() {
                     Component={() => (
                         <DefaultLayout>
                             <Home />
+                        </DefaultLayout>
+                    )}
+                />
+                <Route
+                    path="/reservation"
+                    Component={() => (
+                        <DefaultLayout>
+                            <Reservation />
                         </DefaultLayout>
                     )}
                 />

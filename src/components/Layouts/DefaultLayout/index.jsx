@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, memo } from 'react';
 import Header from '../components/Header';
 
 function DefaultLayout({ children }) {
@@ -10,4 +10,4 @@ function DefaultLayout({ children }) {
     );
 }
 
-export default DefaultLayout;
+export default memo(DefaultLayout);

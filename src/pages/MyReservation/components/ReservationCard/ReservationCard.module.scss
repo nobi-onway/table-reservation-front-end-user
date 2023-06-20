@@ -1,0 +1,73 @@
+.wrapper {
+    border: 1px solid #ccc;
+}
+
+.date-wrapper {
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.reservation-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding: 0 1rem;
+}
+
+.reservation-detail {
+    display: flex;
+    align-items: center;
+    font-size: 1.6rem;
+    margin: 0.25rem 0;
+}
+
+.option-wrapper {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+// shared css
+.txt-xxl {
+    font-size: 3.2rem;
+}
+
+.txt-xl {
+    font-size: 2.8rem;
+}
+
+.txt-l {
+    font-size: 2.4rem;
+}
+
+.txt-m {
+    font-size: 2rem;
+}
+
+.txt-s {
+    font-size: 1.6rem;
+}
+
+.txt-xs {
+    font-size: 1.2rem;
+}
+
+.m-l-4 {
+    margin-left: 0.5rem;
+}
+
+.m-4 {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.bold {
+    font-weight: 700;
+}

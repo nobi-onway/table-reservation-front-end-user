@@ -2,7 +2,6 @@ import Grid from '@mui/material/Grid';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import ControlledRadioButtonsGroup from '../ControlledRatioButtonGroup';
 
 import styles from './TableForm.module.scss';
 import classNames from 'classnames/bind';
@@ -35,53 +34,35 @@ const capacityOptions = [
     },
 ];
 
-const venueOptions = [
-    {
-        value: 'indoor',
-        label: 'indoor',
-    },
-    {
-        value: 'outdoor',
-        label: 'outdoor',
-    },
-];
-
 function TableForm() {
     return (
         <div className={`${cx('wrapper')}`}>
             <span className={`${cx('title')}`}>Reservation</span>
             <form className={`${cx('form')}`}>
                 <Grid container spacing={2}>
-                    <Grid item sm={6}>
+                    <Grid item sm={6} md={6}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker />
                         </LocalizationProvider>
                     </Grid>
-                    <Grid item sm={6}>
+                    <Grid item sm={6} md={6}>
                         <InputSelector
                             label="How many persons?"
                             options={capacityOptions}
                             defaultValue={capacityOptions[0]}
                         />
                     </Grid>
-                    <Grid item sm={6}>
+                    <Grid item sm={6} md={6}>
                         <TimePickerValue label="Check In" />
                     </Grid>
-                    <Grid item sm={6}>
+                    <Grid item sm={6} md={6}>
                         <TimePickerValue label="Check Out" />
                     </Grid>
-                    <Grid item sm={6}>
+                    <Grid item sm={6} md={6}>
                         <BasicTextFields label="Name" type="text" />
                     </Grid>
-                    <Grid item sm={6}>
+                    <Grid item sm={6} md={6}>
                         <BasicTextFields label="Phone number" type="number" />
-                    </Grid>
-                    <Grid item sm={12}>
-                        <ControlledRadioButtonsGroup
-                            label="Venue"
-                            options={venueOptions}
-                            defaultValue={venueOptions[0]}
-                        />
                     </Grid>
                 </Grid>
             </form>

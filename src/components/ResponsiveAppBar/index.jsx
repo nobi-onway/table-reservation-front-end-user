@@ -18,7 +18,7 @@ const pages = [
     { name: 'ABOUT', path: '/' },
     { name: 'CONTACT', path: '/' },
     { name: 'MAKE RESERVATION', path: '/reservation' },
-    { name: 'MY RESERVATION', path: '/' },
+    { name: 'MY RESERVATION', path: '/myReservation' },
 ];
 const guestSettings = ['Sign In', 'Sign Up'];
 

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DefaultLayout from './components/Layouts/DefaultLayout';
 import Home from './pages/Home';
 import Reservation from './pages/Reservation';
+import MyReservation from './pages/MyReservation';
 
 function App() {
     return (
@@ -21,6 +22,14 @@ function App() {
                     Component={() => (
                         <DefaultLayout>
                             <Reservation />
+                        </DefaultLayout>
+                    )}
+                />
+                <Route
+                    path="/myReservation"
+                    Component={() => (
+                        <DefaultLayout>
+                            <MyReservation />
                         </DefaultLayout>
                     )}
                 />

@@ -15,6 +15,7 @@ const Item = styled(Paper)(({ theme }) => ({
     borderRadius: 0,
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    height: '100%',
 }));
 
 function Reservation() {

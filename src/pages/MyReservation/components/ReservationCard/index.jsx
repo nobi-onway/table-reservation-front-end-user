@@ -18,9 +18,7 @@ function ReservationCard() {
         <Grid container className={`${cx('wrapper')}`}>
             <Grid item sm={1} md={1}>
                 <div className={`${cx('date-wrapper')}`}>
-                    <span className={`${cx('txt-m')} ${cx('bold')}`}>
-                        {new Date().toString()}
-                    </span>
+                    <span className={`${cx('txt-m')} ${cx('bold')}`}>June</span>
                     <span className={`${cx('txt-xxl')} ${cx('bold')}`}>27</span>
                 </div>
             </Grid>

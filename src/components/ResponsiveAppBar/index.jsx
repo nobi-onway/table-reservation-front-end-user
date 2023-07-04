@@ -61,7 +61,10 @@ function ResponsiveAppBar() {
             navigate('/home');
         };
 
-        const userSettings = [{ title: 'Logout', handleOnClick: handleLogout }];
+        const userSettings = [
+            { title: `Hi! ${isLogin}`, handleOnClick: () => {} },
+            { title: 'Logout', handleOnClick: handleLogout },
+        ];
 
         setAvatar(() => (isLogin ? userAvatar : guestAvatar));
         setSettings(() => (isLogin ? userSettings : guestSettings));
@@ -84,7 +87,7 @@ function ResponsiveAppBar() {
 
     const handleSignIn = ({ username, password }) => {
         postData(LOGIN_URL, { username, password }, (res) => {
-            localStorage.setItem('username', username);
+            localStorage.setItem('username', res.username);
             setIsLogin(true);
             setIsLoginModalOpen(false);
             navigate('/home');

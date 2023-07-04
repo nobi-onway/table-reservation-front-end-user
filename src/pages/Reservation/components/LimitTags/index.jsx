@@ -9,7 +9,7 @@ export default function LimitTags({ tags, label }) {
             limitTags={2}
             id="multiple-limit-tags"
             options={tags}
-            getOptionLabel={(option) => option.description}
+            getOptionLabel={(option) => option.name}
             defaultValue={[]}
             renderInput={(params) => (
                 <TextField {...params} label={label} placeholder="Favorites" />

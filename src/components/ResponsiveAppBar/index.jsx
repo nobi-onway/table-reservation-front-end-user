@@ -13,27 +13,59 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LoginModal from '../LoginModal';
 import { Link } from 'react-router-dom';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import SignUpModal from '../SignUpModal';
+import { postData } from '../../services/apiService';
+import { LOGIN_URL } from '../../services/constant';
+import { useNavigate } from 'react-router-dom';
 
 const pages = [
-    { name: 'HOME', path: '/' },
+    { name: 'HOME', path: '/home' },
     { name: 'ABOUT', path: '/' },
     { name: 'CONTACT', path: '/' },
     { name: 'MAKE RESERVATION', path: '/reservation' },
     { name: 'MY RESERVATION', path: '/myReservation' },
 ];
 
+const guestAvatar = {
+    alt: 'Guest Logo',
+    src: 'https://www.nicepng.com/png/full/136-1366211_group-of-10-guys-login-user-icon-png.png',
+};
+
+const userAvatar = {
+    alt: 'User Logo',
+    src: 'https://www.freepnglogos.com/uploads/chef-png/png-psd-download-chef-cook-vector-illustration-14.png',
+};
+
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
     const [isSignUpModalOpen, setIsSignUpModalOpen] = React.useState(false);
+    const [avatar, setAvatar] = React.useState(guestAvatar);
+    const [settings, setSettings] = React.useState([]);
+    const [isLogin, setIsLogin] = React.useState(
+        localStorage.getItem('username'),
+    );
+    const navigate = useNavigate();
 
-    const guestSettings = [
-        { title: 'Sign In', handleOnClick: setIsLoginModalOpen },
-        { title: 'Sign Up', handleOnClick: setIsSignUpModalOpen },
-    ];
+    useEffect(() => {
+        const guestSettings = [
+            { title: 'Sign In', handleOnClick: setIsLoginModalOpen },
+            { title: 'Sign Up', handleOnClick: setIsSignUpModalOpen },
+        ];
+
+        const handleLogout = () => {
+            localStorage.removeItem('username');
+            setIsLogin(false);
+            navigate('/home');
+        };
+
+        const userSettings = [{ title: 'Logout', handleOnClick: handleLogout }];
+
+        setAvatar(() => (isLogin ? userAvatar : guestAvatar));
+        setSettings(() => (isLogin ? userSettings : guestSettings));
+    }, [isLogin, navigate]);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -48,6 +80,15 @@ function ResponsiveAppBar() {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    const handleSignIn = ({ username, password }) => {
+        postData(LOGIN_URL, { username, password }, (res) => {
+            localStorage.setItem('username', username);
+            setIsLogin(true);
+            setIsLoginModalOpen(false);
+            navigate('/home');
+        });
     };
 
     return (
@@ -107,7 +148,7 @@ function ResponsiveAppBar() {
                                 }}
                             >
                                 {pages.map((page) => (
-                                    <Link key={page} to={page.path}>
+                                    <Link key={page.name} to={page.path}>
                                         <MenuItem onClick={handleCloseNavMenu}>
                                             <Typography textAlign="center">
                                                 {page.name}
@@ -142,7 +183,7 @@ function ResponsiveAppBar() {
                             }}
                         >
                             {pages.map((page) => (
-                                <Link key={page} to={page.path}>
+                                <Link key={page.name} to={page.path}>
                                     <Button
                                         onClick={handleCloseNavMenu}
                                         sx={{
@@ -162,10 +203,7 @@ function ResponsiveAppBar() {
                                     onClick={handleOpenUserMenu}
                                     sx={{ p: 0 }}
                                 >
-                                    <Avatar
-                                        alt="User Logo"
-                                        src="https://www.nicepng.com/png/full/136-1366211_group-of-10-guys-login-user-icon-png.png"
-                                    />
+                                    <Avatar alt={avatar.alt} src={avatar.src} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
@@ -184,7 +222,7 @@ function ResponsiveAppBar() {
                                 open={Boolean(anchorElUser)}
                                 onClose={handleCloseUserMenu}
                             >
-                                {guestSettings.map((setting) => (
+                                {settings.map((setting) => (
                                     <MenuItem
                                         onClick={() => {
                                             handleCloseUserMenu();
@@ -205,17 +243,18 @@ function ResponsiveAppBar() {
             {isLoginModalOpen && (
                 <LoginModal
                     handleModalClose={() => setIsLoginModalOpen(false)}
-                    handleSignUp={() => {
+                    handleOpenSignUpModal={() => {
                         setIsLoginModalOpen(false);
                         setIsSignUpModalOpen(true);
                     }}
+                    handleSignIn={handleSignIn}
                 />
             )}
 
             {isSignUpModalOpen && (
                 <SignUpModal
                     handleModalClose={() => setIsSignUpModalOpen(false)}
-                    handleSignIn={() => {
+                    handleOpenSignInModal={() => {
                         setIsSignUpModalOpen(false);
                         setIsLoginModalOpen(true);
                     }}

@@ -13,6 +13,13 @@ function App() {
                     path="/"
                     Component={() => (
                         <DefaultLayout>
+                        </DefaultLayout>
+                    )}
+                />
+                <Route
+                    path="/home"
+                    Component={() => (
+                        <DefaultLayout>
                             <Home />
                         </DefaultLayout>
                     )}

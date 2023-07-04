@@ -8,7 +8,7 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-function SignUpModal({ handleModalClose, handleSignIn }) {
+function SignUpModal({ handleModalClose, handleOpenSignInModal }) {
     return (
         <div className={`${cx('overlay')}`}>
             <div className={`${cx('wrapper')}`}>
@@ -66,7 +66,7 @@ function SignUpModal({ handleModalClose, handleSignIn }) {
                     <span className={`${cx('medium-txt')} ${cx('m-col-4')}`}>
                         Have an account?{' '}
                         <button
-                            onClick={handleSignIn}
+                            onClick={handleOpenSignInModal}
                             className={`${cx('sign-in')}`}
                         >
                             Sign In

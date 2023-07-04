@@ -5,7 +5,7 @@ import styles from './ServiceForm.module.scss';
 import classNames from 'classnames/bind';
 import LimitTags from '../LimitTags';
 import { useEffect, useState } from 'react';
-import { getData } from '../../../../services/useService';
+import { getData } from '../../../../services/apiService';
 import { DISHES_URL, SERVICES_URL } from '../../../../services/constant';
 
 const cx = classNames.bind(styles);

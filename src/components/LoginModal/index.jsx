@@ -5,10 +5,14 @@ import logo from '../../img/logo.png';
 
 import styles from './LoginModal.module.scss';
 import classNames from 'classnames/bind';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function LoginModal({ handleModalClose, handleSignUp }) {
+function LoginModal({ handleModalClose, handleOpenSignUpModal, handleSignIn }) {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
     return (
         <div className={`${cx('overlay')}`}>
             <div className={`${cx('wrapper')}`}>
@@ -16,10 +20,22 @@ function LoginModal({ handleModalClose, handleSignUp }) {
                     <img className={`${cx('logo')}`} src={logo} alt="Logo" />
                 </div>
                 <div className={`${cx('m-col-4')} ${cx('m-ver-4')}`}>
-                    <BasicTextFields type="string" label="username" />
+                    <BasicTextFields
+                        required
+                        value={username}
+                        handleChange={(e) => setUsername(e.target.value)}
+                        type="string"
+                        label="username"
+                    />
                 </div>
                 <div className={`${cx('m-col-4')} ${cx('m-ver-4')}`}>
-                    <BasicTextFields type="password" label="password" />
+                    <BasicTextFields
+                        required
+                        value={password}
+                        handleChange={(e) => setPassword(e.target.value)}
+                        type="password"
+                        label="password"
+                    />
                 </div>
                 <div className={`${cx('button-wrapper')} ${cx('m-ver-4')}`}>
                     <Button
@@ -27,6 +43,7 @@ function LoginModal({ handleModalClose, handleSignUp }) {
                         size="large"
                         variant="contained"
                         disableElevation
+                        onClick={() => handleSignIn({ username, password })}
                     >
                         SIGN IN
                     </Button>
@@ -40,13 +57,13 @@ function LoginModal({ handleModalClose, handleSignUp }) {
                 </button>
 
                 <div className={`${cx('flex-center')} ${cx('flex-col')}`}>
-                    <a href="#" className={`${cx('forgot-password')}`}>
+                    <button className={`${cx('forgot-password')}`}>
                         Forgot Password?
-                    </a>
+                    </button>
                     <span className={`${cx('medium-txt')} ${cx('m-col-2')}`}>
                         Don't have an account?{' '}
                         <button
-                            onClick={handleSignUp}
+                            onClick={handleOpenSignUpModal}
                             className={`${cx('sign-up')}`}
                         >
                             Sign Up

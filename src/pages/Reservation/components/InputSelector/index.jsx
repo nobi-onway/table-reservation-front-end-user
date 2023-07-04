@@ -17,6 +17,7 @@ function InputSelector({ label, options, defaultSelection }) {
                 {label}
             </InputLabel>
             <Select
+                sx={{ textAlign: 'left' }}
                 labelId={`simple-select-required-${label}`}
                 id="simple-select-required"
                 value={value}

@@ -10,6 +10,7 @@ export default function TimePickerValue({ label }) {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
+                sx={{ width: '100%' }}
                 label={label}
                 value={value}
                 onChange={(newValue) => setValue(newValue)}

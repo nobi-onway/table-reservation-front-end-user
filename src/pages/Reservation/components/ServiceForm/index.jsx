@@ -1,5 +1,4 @@
 import Grid from '@mui/material/Grid';
-import ControlledRadioButtonsGroup from '../ControlledRatioButtonGroup';
 
 import styles from './ServiceForm.module.scss';
 import classNames from 'classnames/bind';
@@ -47,19 +46,19 @@ function ServiceForm() {
     const [dishes, setDishes] = useState(defaultDishes);
     const [services, setServices] = useState(defaultServices);
 
-    useEffect(() => {
-        getData(DISHES_URL, (dishes) => {
-            const newDishes = dishes || defaultDishes;
-            setDishes(newDishes);
-        });
-    }, [dishes]);
+    // useEffect(() => {
+    //     getData(DISHES_URL, (dishes) => {
+    //         const newDishes = dishes || defaultDishes;
+    //         setDishes(newDishes);
+    //     });
+    // }, [dishes]);
 
-    useEffect(() => {
-        getData(SERVICES_URL, (services) => {
-            const newServices = services || defaultServices;
-            setServices(newServices);
-        });
-    }, [dishes]);
+    // useEffect(() => {
+    //     getData(SERVICES_URL, (services) => {
+    //         const newServices = services || defaultServices;
+    //         setServices(newServices);
+    //     });
+    // }, [services]);
 
     return (
         <div className={`${cx('wrapper')}`}>
@@ -72,13 +71,13 @@ function ServiceForm() {
                     <Grid item sm={12} md={12}>
                         <LimitTags label="dishes" tags={dishes} />
                     </Grid>
-                    <Grid item sm={12} md={12}>
+                    {/* <Grid item sm={12} md={12}>
                         <ControlledRadioButtonsGroup
                             label="Venue"
                             options={venueOptions}
                             defaultValue={venueOptions[0]}
                         />
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </form>
         </div>

@@ -22,14 +22,10 @@ function Reservation() {
     return (
         <div className={`${cx('wrapper')}`}>
             <Grid container spacing={0} className={`${cx('form')}`}>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                     <Item>
                         <TableForm />
-                    </Item>
-                </Grid>
-                <Grid item xs={6}>
-                    <Item>
-                        <ServiceForm />
+                        {/* <ServiceForm /> */}
                     </Item>
                 </Grid>
                 <Grid item xs={12}>

@@ -18,6 +18,8 @@ import SignUpModal from '../SignUpModal';
 import { postData } from '../../services/apiService';
 import { LOGIN_URL } from '../../services/constant';
 import { useNavigate } from 'react-router-dom';
+import CustomizedSnackbars from '../SnackBar';
+import useToast from '../../hooks/useToast';
 
 const pages = [
     { name: 'HOME', path: '/home' },
@@ -48,6 +50,14 @@ function ResponsiveAppBar() {
         localStorage.getItem('username'),
     );
     const navigate = useNavigate();
+
+    const {
+        isSnackBarOpen,
+        severity,
+        message,
+        handleNotification,
+        setIsSnackBarOpen,
+    } = useToast();
 
     useEffect(() => {
         const guestSettings = [
@@ -86,11 +96,16 @@ function ResponsiveAppBar() {
     };
 
     const handleSignIn = ({ username, password }) => {
-        postData(LOGIN_URL, { username, password }, (res) => {
-            localStorage.setItem('username', res.username);
-            setIsLogin(true);
-            setIsLoginModalOpen(false);
-            navigate('/home');
+        postData(LOGIN_URL, { username, password }, (res, error) => {
+            if (res.status == 200) {
+                localStorage.setItem('username', res.username);
+                setIsLogin(true);
+                setIsLoginModalOpen(false);
+                navigate('/home');
+                handleNotification('success', 'Login successful!');
+            } else {
+                handleNotification('error', 'Login fail!');
+            }
         });
     };
 
@@ -263,6 +278,13 @@ function ResponsiveAppBar() {
                     }}
                 />
             )}
+
+            <CustomizedSnackbars
+                open={isSnackBarOpen}
+                handleClose={() => setIsSnackBarOpen(false)}
+                severity={severity}
+                message={message}
+            />
         </Fragment>
     );
 }

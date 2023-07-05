@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 import { postData } from '../../../../services/apiService';
 import { CREATE_RESERVATION_URL } from '../../../../services/constant';
 import CustomizedSnackbars from '../../../../components/SnackBar';
+import useToast from '../../../../hooks/useToast';
 
 const cx = classNames.bind(styles);
 
@@ -82,9 +83,13 @@ function TableForm() {
     const [checkInTime, setCheckInTime] = useState(dayjs(new Date()));
     const [numberOfPersons, setNumberOfPersons] = useState();
 
-    const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-    const [severity, setSeverity] = useState('success');
-    const [message, setMessage] = useState('');
+    const {
+        isSnackBarOpen,
+        severity,
+        message,
+        handleNotification,
+        setIsSnackBarOpen,
+    } = useToast();
 
     useEffect(() => {
         const newVenues = itemData.filter(
@@ -121,16 +126,6 @@ function TableForm() {
                 handleNotification('error', `Making reservation fail!`);
             }
         });
-    };
-
-    const handleNotification = (severity, message) => {
-        setIsSnackBarOpen(true);
-        setSeverity(severity);
-        setMessage(message);
-
-        setTimeout(() => {
-            setIsSnackBarOpen(false);
-        }, 2000);
     };
 
     const handleResetInputData = () => {

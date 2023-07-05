@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import styles from './ServiceForm.module.scss';
 import classNames from 'classnames/bind';
 import LimitTags from '../LimitTags';
+import OutlinedButton from '../OutlinedButton';
 import { useEffect, useState } from 'react';
 import { getData } from '../../../../services/apiService';
 import { DISHES_URL, SERVICES_URL } from '../../../../services/constant';
@@ -17,17 +18,6 @@ const defaultServices = [
     {
         description: 'live music',
         price: 300,
-    },
-];
-
-const venueOptions = [
-    {
-        value: 'indoor',
-        label: 'indoor',
-    },
-    {
-        value: 'outdoor',
-        label: 'outdoor',
     },
 ];
 
@@ -64,20 +54,28 @@ function ServiceForm() {
         <div className={`${cx('wrapper')}`}>
             <span className={`${cx('title')}`}>Dishes & Services</span>
             <form className={`${cx('form')}`}>
-                <Grid container>
-                    <Grid item sm={12} md={12}>
-                        <LimitTags label="services" tags={services} />
-                    </Grid>
-                    <Grid item sm={12} md={12}>
+                <Grid container spacing={8}>
+                    <Grid item sm={12} md={5}>
+                        <div className={`${cx('sub-title')}`}>
+                            <span>Food and Beverage</span>
+                        </div>
                         <LimitTags label="dishes" tags={dishes} />
                     </Grid>
-                    {/* <Grid item sm={12} md={12}>
-                        <ControlledRadioButtonsGroup
-                            label="Venue"
-                            options={venueOptions}
-                            defaultValue={venueOptions[0]}
-                        />
-                    </Grid> */}
+                    <Grid item sm={12} md={5}>
+                        <div className={`${cx('sub-title')}`}>
+                            <span>Services</span>
+                        </div>
+                        <LimitTags label="services" tags={services} />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                        <div className={`${cx('footer')}`}>
+                            <OutlinedButton
+                                style={{ margin: '0 1rem' }}
+                                label="Order now"
+                            />
+                            <OutlinedButton label="Skip" />
+                        </div>
+                    </Grid>
                 </Grid>
             </form>
         </div>

@@ -3,6 +3,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ControlledRadioButtonsGroup from '../ControlledRatioButtonGroup';
+import OutlinedButton from '../OutlinedButton';
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
 
 import styles from './TableForm.module.scss';
 import classNames from 'classnames/bind';
@@ -50,6 +53,16 @@ const itemData = [
         category: 'Outdoor',
     },
 ];
+
+const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    borderRadius: 0,
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    height: '100%',
+}));
 
 function TableForm() {
     const [venueCategory, setVenueCategory] = useState('Indoor');
@@ -122,6 +135,11 @@ function TableForm() {
                                 setVenueCategory(e.target.value)
                             }
                         />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                        <Item>
+                            <OutlinedButton label="Reserve now" />
+                        </Item>
                     </Grid>
                 </Grid>
             </form>

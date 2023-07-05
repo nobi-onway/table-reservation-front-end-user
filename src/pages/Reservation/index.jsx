@@ -22,8 +22,8 @@ function Reservation() {
             <Grid container spacing={0} className={`${cx('form')}`}>
                 <Grid item xs={12}>
                     <Item>
-                        {/* <TableForm /> */}
-                        <ServiceForm />
+                        <TableForm />
+                        {/* <ServiceForm /> */}
                     </Item>
                 </Grid>
             </Grid>

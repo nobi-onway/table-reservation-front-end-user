@@ -6,13 +6,16 @@ import ControlledRadioButtonsGroup from '../ControlledRatioButtonGroup';
 import OutlinedButton from '../OutlinedButton';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-
+import dayjs from 'dayjs';
 import styles from './TableForm.module.scss';
 import classNames from 'classnames/bind';
 import TimePickerValue from '../TimePickerValue';
 import BasicTextFields from '../BasicTextFields';
 import TitlebarImageList from '../TitleBarImageList';
 import { useEffect, useState } from 'react';
+import { postData } from '../../../../services/apiService';
+import { CREATE_RESERVATION_URL } from '../../../../services/constant';
+import CustomizedSnackbars from '../../../../components/SnackBar';
 
 const cx = classNames.bind(styles);
 
@@ -29,24 +32,28 @@ const venueOptions = [
 
 const itemData = [
     {
+        id: 1,
         img: 'https://pvu.thebluebook.com/inc/img/qp/2214759/lrg_the-orchid-banquet-hall.jpg',
         name: 'Orchid Hall',
         capacity: 100,
         category: 'Indoor',
     },
     {
+        id: 2,
         img: 'https://botanica.org/wp-content/uploads/2021/11/Vanessa-Matthew-1131-1.jpg',
         name: 'Lotus Hall',
         capacity: 70,
         category: 'Indoor',
     },
     {
+        id: 3,
         img: 'https://c8.alamy.com/comp/2H24EW3/the-streets-of-the-city-centre-the-bazaar-and-the-port-area-in-side-antalya-street-view-sunset-cloudy-sky-cafe-restaurant-shop-and-houses-2H24EW3.jpg',
         name: 'Cloudy Area',
         capacity: 40,
         category: 'Outdoor',
     },
     {
+        id: 4,
         img: 'https://novum-hotel-golden-park-budapest.booked.net/data/Photos/OriginalPhoto/10158/1015866/1015866910/Hotel-Golden-Park-Budapest-Exterior.JPEG',
         name: 'Golden Park Hall',
         capacity: 60,
@@ -66,8 +73,18 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function TableForm() {
     const [venueCategory, setVenueCategory] = useState('Indoor');
-    const [venues, setVenues] = useState([]);
+    const [venues, setVenues] = useState(itemData);
     const [venue, setVenue] = useState({});
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
+    const [date, setDate] = useState(dayjs(new Date()));
+    const [checkInTime, setCheckInTime] = useState(dayjs(new Date()));
+    const [numberOfPersons, setNumberOfPersons] = useState();
+
+    const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+    const [severity, setSeverity] = useState('success');
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         const newVenues = itemData.filter(
@@ -76,6 +93,55 @@ function TableForm() {
         setVenues(newVenues);
     }, [venueCategory]);
 
+    useEffect(() => {
+        setVenue(venues[0]);
+    }, []);
+
+    const handleReserve = () => {
+        const currentDate = dayjs(new Date());
+
+        const reservation = {
+            capacityMasterDataId: venue.id,
+            status: 'pending processing',
+            numberOfGuest: numberOfPersons,
+            createDate: `${currentDate.format('YYYY-MM-DD')}`,
+            checkinTime: `${date.format(
+                'YYYY-MM-DD',
+            )} ${checkInTime.hour()}:${checkInTime.minute()}`,
+        };
+
+        postData(CREATE_RESERVATION_URL, reservation, (res, error) => {
+            if (res.status == 200) {
+                handleResetInputData();
+                handleNotification(
+                    'success',
+                    `Making reservation successfully!`,
+                );
+            } else {
+                handleNotification('error', `Making reservation fail!`);
+            }
+        });
+    };
+
+    const handleNotification = (severity, message) => {
+        setIsSnackBarOpen(true);
+        setSeverity(severity);
+        setMessage(message);
+
+        setTimeout(() => {
+            setIsSnackBarOpen(false);
+        }, 2000);
+    };
+
+    const handleResetInputData = () => {
+        setName('');
+        setEmail('');
+        setPhone('');
+        setNumberOfPersons('');
+        setCheckInTime(dayjs(new Date()));
+        setDate(dayjs(new Date()));
+    };
+
     return (
         <div className={`${cx('wrapper')}`}>
             <span className={`${cx('title')}`}>Reservation Detail</span>
@@ -83,6 +149,8 @@ function TableForm() {
                 <Grid container spacing={2}>
                     <Grid item sm={6} md={4}>
                         <BasicTextFields
+                            value={name}
+                            handleChange={(e) => setName(e.target.value)}
                             required
                             label="Your name"
                             type="text"
@@ -90,24 +158,49 @@ function TableForm() {
                     </Grid>
                     <Grid item sm={6} md={4}>
                         <BasicTextFields
+                            value={phone}
+                            handleChange={(e) => setPhone(e.target.value)}
                             required
                             label="Contact number"
                             type="number"
                         />
                     </Grid>
                     <Grid item sm={6} md={4}>
-                        <BasicTextFields required label="Email" type="email" />
+                        <BasicTextFields
+                            value={email}
+                            handleChange={(e) => setEmail(e.target.value)}
+                            required
+                            label="Email"
+                            type="email"
+                        />
                     </Grid>
                     <Grid item sm={6} md={4}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker sx={{ width: '100%' }} />
+                            <DatePicker
+                                value={date}
+                                onChange={(value) => {
+                                    setDate(value);
+                                }}
+                                sx={{ width: '100%' }}
+                            />
                         </LocalizationProvider>
                     </Grid>
                     <Grid item sm={6} md={4}>
-                        <TimePickerValue required label="Check In" />
+                        <TimePickerValue
+                            value={checkInTime}
+                            onChange={(value) => {
+                                setCheckInTime(value);
+                            }}
+                            required
+                            label="Check In"
+                        />
                     </Grid>
                     <Grid item sm={6} md={4}>
                         <BasicTextFields
+                            value={numberOfPersons}
+                            handleChange={(e) =>
+                                setNumberOfPersons(e.target.value)
+                            }
                             required
                             label="How many persons?"
                             type="number"
@@ -119,7 +212,6 @@ function TableForm() {
                                 itemData={venues}
                                 title={venueCategory}
                                 handleOnSelected={(item) => {
-                                    console.log(item);
                                     setVenue(item);
                                 }}
                                 selectedVenue={venue}
@@ -138,11 +230,20 @@ function TableForm() {
                     </Grid>
                     <Grid item xs={12} md={12}>
                         <Item>
-                            <OutlinedButton label="Reserve now" />
+                            <OutlinedButton
+                                onClick={handleReserve}
+                                label="Reserve now"
+                            />
                         </Item>
                     </Grid>
                 </Grid>
             </form>
+            <CustomizedSnackbars
+                open={isSnackBarOpen}
+                handleClose={() => setIsSnackBarOpen(false)}
+                severity={severity}
+                message={message}
+            />
         </div>
     );
 }

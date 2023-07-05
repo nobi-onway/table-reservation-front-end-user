@@ -13,7 +13,8 @@ function postData(url, data, callback) {
     };
     fetch(`${API_PATH}${url}`, options)
         .then((response) => response.json())
-        .then(callback);
+        .then(callback)
+        .catch(callback)
 }
 
 function deleteData(url, id, callback) {

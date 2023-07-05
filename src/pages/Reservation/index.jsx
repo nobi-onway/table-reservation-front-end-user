@@ -5,7 +5,6 @@ import Grid from '@mui/material/Grid';
 
 import styles from './Reservation.module.scss';
 import classNames from 'classnames/bind';
-import OutlinedButton from './components/OutlinedButton';
 const cx = classNames.bind(styles);
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -17,24 +16,14 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
     height: '100%',
 }));
-
 function Reservation() {
     return (
         <div className={`${cx('wrapper')}`}>
             <Grid container spacing={0} className={`${cx('form')}`}>
-                <Grid item xs={6}>
-                    <Item>
-                        <TableForm />
-                    </Item>
-                </Grid>
-                <Grid item xs={6}>
-                    <Item>
-                        <ServiceForm />
-                    </Item>
-                </Grid>
                 <Grid item xs={12}>
                     <Item>
-                        <OutlinedButton label="Reserve now" />
+                        <TableForm />
+                        {/* <ServiceForm /> */}
                     </Item>
                 </Grid>
             </Grid>

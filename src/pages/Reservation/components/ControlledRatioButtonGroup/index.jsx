@@ -4,13 +4,11 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 
-export default function ControlledRadioButtonsGroup({ options, defaultValue }) {
-    const [value, setValue] = React.useState(defaultValue);
-
-    const handleChange = (event) => {
-        setValue(event.target.value);
-    };
-
+export default function ControlledRadioButtonsGroup({
+    options,
+    value,
+    handleChange,
+}) {
     return (
         <FormControl>
             <RadioGroup

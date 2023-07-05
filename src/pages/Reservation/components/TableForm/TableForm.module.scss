@@ -6,10 +6,19 @@
 }
 
 .title {
+    text-align: left;
     font-weight: 700;
     font-size: 2.4rem;
+    border-bottom: 1px solid;
 }
 
 .form {
     margin: 1.2rem 0;
+}
+
+// shared css
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

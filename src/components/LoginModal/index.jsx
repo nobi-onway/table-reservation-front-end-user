@@ -24,7 +24,7 @@ function LoginModal({ handleModalClose, handleOpenSignUpModal, handleSignIn }) {
                         required
                         value={username}
                         handleChange={(e) => setUsername(e.target.value)}
-                        type="string"
+                        type="text"
                         label="username"
                     />
                 </div>

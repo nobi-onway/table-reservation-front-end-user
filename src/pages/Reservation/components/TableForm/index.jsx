@@ -13,8 +13,11 @@ import TimePickerValue from '../TimePickerValue';
 import BasicTextFields from '../BasicTextFields';
 import TitlebarImageList from '../TitleBarImageList';
 import { useEffect, useState } from 'react';
-import { postData } from '../../../../services/apiService';
-import { CREATE_RESERVATION_URL } from '../../../../services/constant';
+import { getData, postData } from '../../../../services/apiService';
+import {
+    CAPACITY_MASTER_DATA,
+    CREATE_RESERVATION_URL,
+} from '../../../../services/constant';
 import CustomizedSnackbars from '../../../../components/SnackBar';
 import useToast from '../../../../hooks/useToast';
 
@@ -99,7 +102,13 @@ function TableForm() {
     }, [venueCategory]);
 
     useEffect(() => {
-        setVenue(venues[0]);
+        getData(CAPACITY_MASTER_DATA, (res) => {
+            if (res.body) {
+                const newVenues = res.body;
+                setVenues(newVenues);
+                setVenue(newVenues[0]);
+            }
+        });
     }, []);
 
     const handleReserve = () => {

@@ -1,4 +1,4 @@
-const API_PATH = 'localhost:8080';
+const API_PATH = 'http://localhost:8080';
 const DISHES_URL = '/dishes';
 const SERVICES_URL = '/services';
 const LOGIN_URL = '/login'

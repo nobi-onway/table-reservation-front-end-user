@@ -1,6 +1,13 @@
 import { API_PATH } from './constant';
 
 function getData(url, callback) {
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    };
     fetch(`${API_PATH}${url}`)
         .then((response) => response.json())
         .then(callback);
@@ -9,6 +16,9 @@ function getData(url, callback) {
 function postData(url, data, callback) {
     const options = {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify(data),
     };
     fetch(`${API_PATH}${url}`, options)

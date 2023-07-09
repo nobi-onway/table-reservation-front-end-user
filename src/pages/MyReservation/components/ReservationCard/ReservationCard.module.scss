@@ -48,6 +48,16 @@
     align-items: center;
 }
 
+.notify-message {
+    display: block;
+    font-weight: 700;
+    width: 100%;
+    text-align: right;
+    margin: 0.5rem 0;
+    font-style: italic;
+    color: #e8840e;
+}
+
 // shared css
 .txt-xxl {
     font-size: 3.2rem;

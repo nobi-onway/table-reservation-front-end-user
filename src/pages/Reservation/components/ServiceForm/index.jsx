@@ -5,7 +5,12 @@ import classNames from 'classnames/bind';
 import OutlinedButton from '../OutlinedButton';
 import { useEffect, useState } from 'react';
 import { getData, postData } from '../../../../services/apiService';
-import { DISHES_URL, ORDER_DISHES, ORDER_SERVICE, SERVICES_URL } from '../../../../services/apiConstant';
+import {
+    DISHES_URL,
+    ORDER_DISHES_URL,
+    ORDER_SERVICE_URL,
+    SERVICES_URL,
+} from '../../../../services/apiConstant';
 import ServiceItem from '../ServiceItem';
 import AddServiceItemButton from '../AddServiceItemButton';
 import DishesItem from '../DishesItem';
@@ -65,30 +70,43 @@ function ServiceForm() {
             return;
         }
 
-        const newItem = {...item, quantity: 1}
+        const newItem = { ...item, quantity: 1 };
         setSelectedItems((preState) => [...preState, newItem]);
     };
 
     const handleOrderDishes = () => {
-        const dishes = selectedDishes.map(dish => ({dishId: dish.dishId, quantity: dish.quantity}))
+        const dishes = selectedDishes.map((dish) => ({
+            dishId: dish.dishId,
+            quantity: dish.quantity,
+        }));
 
-        postData(ORDER_DISHES, dishes, (res) => {
-            if(res.status === 200) handleNotification('success', 'Making order dishes successfully!')
-        })
-    }
+        postData(ORDER_DISHES_URL, dishes, (res) => {
+            if (res.status === 200)
+                handleNotification(
+                    'success',
+                    'Making order dishes successfully!',
+                );
+        });
+    };
 
     const handleOrderService = () => {
-        const services = selectedServices.map(service => ({serviceId: service.serviceId}))
+        const services = selectedServices.map((service) => ({
+            serviceId: service.serviceId,
+        }));
 
-        postData(ORDER_SERVICE, services, (res) => {
-            if(res.status === 200) handleNotification('success', 'Making order services successfully!')
-        })
-    }
+        postData(ORDER_SERVICE_URL, services, (res) => {
+            if (res.status === 200)
+                handleNotification(
+                    'success',
+                    'Making order services successfully!',
+                );
+        });
+    };
 
     const handleSubmitOrder = () => {
-        handleOrderDishes()
-        handleOrderService()
-    }
+        handleOrderDishes();
+        handleOrderService();
+    };
 
     useEffect(() => {
         getData(DISHES_URL, (dishes) => {
@@ -118,7 +136,10 @@ function ServiceForm() {
                                     key={index}
                                     item={dish}
                                     handleRemoveItem={(item) =>
-                                        handleRemoveItem(item, setSelectedDishes)
+                                        handleRemoveItem(
+                                            item,
+                                            setSelectedDishes,
+                                        )
                                     }
                                 />
                             ))}
@@ -146,7 +167,10 @@ function ServiceForm() {
                                     key={index}
                                     item={service}
                                     handleRemoveItem={(item) =>
-                                        handleRemoveItem(item, setSelectedServices)
+                                        handleRemoveItem(
+                                            item,
+                                            setSelectedServices,
+                                        )
                                     }
                                 />
                             ))}
@@ -167,14 +191,14 @@ function ServiceForm() {
                 </Grid>
                 <Grid container>
                     <Grid item xs={12} md={12}>
-                            <div className={`${cx('footer')}`}>
-                                <OutlinedButton
-                                    style={{ margin: '0 1rem' }}
-                                    label="Order now"
-                                    onClick={handleSubmitOrder}
-                                />
-                                <OutlinedButton label="Skip" />
-                            </div>
+                        <div className={`${cx('footer')}`}>
+                            <OutlinedButton
+                                style={{ margin: '0 1rem' }}
+                                label="Order now"
+                                onClick={handleSubmitOrder}
+                            />
+                            <OutlinedButton label="Skip" />
+                        </div>
                     </Grid>
                 </Grid>
             </form>

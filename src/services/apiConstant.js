@@ -3,8 +3,9 @@ const DISHES_URL = '/dishes';
 const SERVICES_URL = '/services';
 const LOGIN_URL = '/login'
 const CREATE_RESERVATION_URL = '/create-reservation'
-const CAPACITY_MASTER_DATA = '/capacity-master-data'
-const ORDER_DISHES = '/order-dish'
-const ORDER_SERVICE = '/order-service'
+const CAPACITY_MASTER_DATA_URL = '/capacity-master-data'
+const ORDER_DISHES_URL = '/order-dish'
+const ORDER_SERVICE_URL = '/order-service'
+const RESERVATION_URL = '/reservations'
 
-export { API_PATH, DISHES_URL, SERVICES_URL, LOGIN_URL, CREATE_RESERVATION_URL, CAPACITY_MASTER_DATA, ORDER_DISHES, ORDER_SERVICE };
+export { API_PATH, DISHES_URL, SERVICES_URL, LOGIN_URL, CREATE_RESERVATION_URL, CAPACITY_MASTER_DATA_URL, ORDER_DISHES_URL, ORDER_SERVICE_URL, RESERVATION_URL };

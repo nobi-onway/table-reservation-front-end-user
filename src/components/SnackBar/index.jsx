@@ -19,15 +19,17 @@ export default function CustomizedSnackbars({
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 open={open}
-                autoHideDuration={6000}
+                autoHideDuration={2000}
                 onClose={handleClose}
             >
-                <Alert
-                    onClose={handleClose}
-                    severity={severity}
-                    sx={{ width: '100%' }}
-                >
-                    {message}
+                <Alert onClose={handleClose} severity={severity}>
+                    <span
+                        style={{
+                            fontSize: '1.4rem',
+                        }}
+                    >
+                        {message}
+                    </span>
                 </Alert>
             </Snackbar>
         </Stack>

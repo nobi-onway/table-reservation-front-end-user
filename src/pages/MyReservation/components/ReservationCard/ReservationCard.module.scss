@@ -11,10 +11,24 @@
     height: 100%;
 }
 
+.image-wrapper {
+    border-right: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    img {
+        object-fit: cover;
+        padding: 0.5rem;
+        min-width: 128px;
+        height: 128px;
+    }
+}
+
 .reservation-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     height: 100%;
     padding: 0 1rem;
 }

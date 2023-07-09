@@ -1,4 +1,4 @@
-import { API_PATH } from './constant';
+import { API_PATH } from './apiConstant';
 
 function getData(url, callback) {
     const options = {
@@ -6,9 +6,8 @@ function getData(url, callback) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
     };
-    fetch(`${API_PATH}${url}`)
+    fetch(`${API_PATH}${url}`, options)
         .then((response) => response.json())
         .then(callback);
 }

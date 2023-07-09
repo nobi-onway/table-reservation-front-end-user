@@ -5,6 +5,8 @@ import ShareLocationIcon from '@mui/icons-material/ShareLocation';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import RoomServiceOutlinedIcon from '@mui/icons-material/RoomServiceOutlined';
 import FoodBankOutlinedIcon from '@mui/icons-material/FoodBankOutlined';
+import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
+import PriceCheckOutlinedIcon from '@mui/icons-material/PriceCheckOutlined';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -16,13 +18,12 @@ const cx = classNames.bind(styles);
 function ReservationCard() {
     return (
         <Grid container className={`${cx('wrapper')}`}>
-            <Grid item sm={1} md={1}>
-                <div className={`${cx('date-wrapper')}`}>
-                    <span className={`${cx('txt-m')} ${cx('bold')}`}>June</span>
-                    <span className={`${cx('txt-xxl')} ${cx('bold')}`}>27</span>
+            <Grid item sm={2} md={2}>
+                <div className={`${cx('image-wrapper')}`}>
+                    <img alt='venue' src="https://pvu.thebluebook.com/inc/img/qp/2214759/lrg_the-orchid-banquet-hall.jpg" />
                 </div>
             </Grid>
-            <Grid item sm={5} md={5} style={{ padding: '1rem 0' }}>
+            <Grid item sm={4} md={4} style={{ padding: '1rem 0' }}>
                 <div className={`${cx('reservation-wrapper')}`}>
                     <div className={`${cx('reservation-detail')}`}>
                         <CalendarMonthIcon />
@@ -44,7 +45,7 @@ function ReservationCard() {
                             <span className={`${cx('bold')} ${cx('m-4')}`}>
                                 Time:
                             </span>
-                            13:00 - 15:00
+                            13:00
                         </span>
                     </div>
                     <div className={`${cx('reservation-detail')}`}>
@@ -67,7 +68,7 @@ function ReservationCard() {
                     </div>
                 </div>
             </Grid>
-            <Grid item sm={4} md={4}>
+            <Grid item sm={4} md={4} style={{ padding: '1rem 0' }}>
                 <div className={`${cx('reservation-wrapper')}`}>
                     <div className={`${cx('reservation-detail')}`}>
                         <RoomServiceOutlinedIcon />
@@ -87,9 +88,37 @@ function ReservationCard() {
                             None
                         </span>
                     </div>
+                    <div className={`${cx('reservation-detail')}`}>
+                        <PaymentsOutlinedIcon />
+                        <span className={`${cx('txt-s')}`}>
+                            <span className={`${cx('bold')} ${cx('m-4')}`}>
+                                Total estimate:
+                            </span>
+                            None
+                        </span>
+                    </div>
+                    <div className={`${cx('reservation-detail')}`}>
+                        <PriceCheckOutlinedIcon />
+                        <span className={`${cx('txt-s')}`}>
+                            <span className={`${cx('bold')} ${cx('m-4')}`}>
+                                Deposit required:
+                            </span>
+                            None
+                        </span>
+                    </div>
                 </div>
             </Grid>
-            <Grid item sm={2} md={2} style={{ padding: '1rem 0' }}>
+            <Grid
+                item
+                sm={2}
+                md={2}
+                style={{
+                    display: 'flex',
+                    padding: '1rem',
+                    justifyContent: 'flex-end',
+                    alignItems: 'flex-end',
+                }}
+            >
                 <div className={`${cx('option-wrapper')} ${cx('txt-xs')}`}>
                     <span
                         className={`${cx('bold')}`}

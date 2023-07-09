@@ -9,10 +9,6 @@ function useToast() {
         setIsSnackBarOpen(true);
         setSeverity(severity);
         setMessage(message);
-
-        setTimeout(() => {
-            setIsSnackBarOpen(false);
-        }, 2000);
     };
 
     return {

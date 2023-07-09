@@ -20,7 +20,7 @@ function ReservationCard() {
         <Grid container className={`${cx('wrapper')}`}>
             <Grid item sm={2} md={2}>
                 <div className={`${cx('image-wrapper')}`}>
-                    <img src="https://pvu.thebluebook.com/inc/img/qp/2214759/lrg_the-orchid-banquet-hall.jpg" />
+                    <img alt='venue' src="https://pvu.thebluebook.com/inc/img/qp/2214759/lrg_the-orchid-banquet-hall.jpg" />
                 </div>
             </Grid>
             <Grid item sm={4} md={4} style={{ padding: '1rem 0' }}>

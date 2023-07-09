@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import { Fragment, useEffect } from 'react';
 import SignUpModal from '../SignUpModal';
 import { postData } from '../../services/apiService';
-import { LOGIN_URL } from '../../services/constant';
+import { LOGIN_URL } from '../../services/apiConstant';
 import { useNavigate } from 'react-router-dom';
 import CustomizedSnackbars from '../SnackBar';
 import useToast from '../../hooks/useToast';
@@ -97,7 +97,7 @@ function ResponsiveAppBar() {
 
     const handleSignIn = ({ username, password }) => {
         postData(LOGIN_URL, { username, password }, (res, error) => {
-            if (res.status == 200) {
+            if (res.status === 200) {
                 localStorage.setItem('username', res.username);
                 setIsLogin(true);
                 setIsLoginModalOpen(false);

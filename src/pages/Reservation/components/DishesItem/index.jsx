@@ -3,15 +3,15 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import classNames from 'classnames/bind';
 import styles from './DishesItem.module.scss';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
 function DishesItem({ item, handleRemoveItem }) {
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(item.quantity);
 
     const handleUpdateQuantity = (value) => {
-        item.quantity = value;
+        item.quantity = parseInt(value);
         setQuantity(value);
     };
 
@@ -24,7 +24,10 @@ function DishesItem({ item, handleRemoveItem }) {
                     </span>
 
                     <button
-                        onClick={() => handleRemoveItem(item)}
+                        onClick={(event) => {
+                            event.preventDefault()
+                            handleRemoveItem(item)
+                        }}
                         className={`${cx('delete')}`}
                     >
                         <HighlightOffIcon />

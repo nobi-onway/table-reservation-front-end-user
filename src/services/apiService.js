@@ -1,4 +1,4 @@
-import { API_PATH } from './constant';
+import { API_PATH } from './apiConstant';
 
 function getData(url, callback) {
     const options = {

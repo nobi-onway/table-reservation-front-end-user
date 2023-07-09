@@ -2,11 +2,10 @@ import Grid from '@mui/material/Grid';
 
 import styles from './ServiceForm.module.scss';
 import classNames from 'classnames/bind';
-import LimitTags from '../LimitTags';
 import OutlinedButton from '../OutlinedButton';
-import { Fragment, useEffect, useState } from 'react';
-import { getData } from '../../../../services/apiService';
-import { DISHES_URL, SERVICES_URL } from '../../../../services/constant';
+import { useEffect, useState } from 'react';
+import { getData, postData } from '../../../../services/apiService';
+import { DISHES_URL, ORDER_DISHES, ORDER_SERVICE, SERVICES_URL } from '../../../../services/apiConstant';
 import ServiceItem from '../ServiceItem';
 import AddServiceItemButton from '../AddServiceItemButton';
 import DishesItem from '../DishesItem';
@@ -54,7 +53,7 @@ function ServiceForm() {
 
     const handleRemoveItem = (item, setSelectedItems) => {
         setSelectedItems((preState) =>
-            preState.filter((i) => i.name != item.name),
+            preState.filter((i) => i.name !== item.name),
         );
     };
 
@@ -66,22 +65,42 @@ function ServiceForm() {
             return;
         }
 
-        setSelectedItems((preState) => [...preState, item]);
+        const newItem = {...item, quantity: 1}
+        setSelectedItems((preState) => [...preState, newItem]);
     };
 
-    // useEffect(() => {
-    //     getData(DISHES_URL, (dishes) => {
-    //         const newDishes = dishes || defaultDishes;
-    //         setDishes(newDishes);
-    //     });
-    // }, [dishes]);
+    const handleOrderDishes = () => {
+        const dishes = selectedDishes.map(dish => ({dishId: dish.dishId, quantity: dish.quantity}))
 
-    // useEffect(() => {
-    //     getData(SERVICES_URL, (services) => {
-    //         const newServices = services || defaultServices;
-    //         setServices(newServices);
-    //     });
-    // }, [services]);
+        postData(ORDER_DISHES, dishes, (res) => {
+            if(res.status === 200) handleNotification('success', 'Making order dishes successfully!')
+        })
+    }
+
+    const handleOrderService = () => {
+        const services = selectedServices.map(service => ({serviceId: service.serviceId}))
+
+        postData(ORDER_SERVICE, services, (res) => {
+            if(res.status === 200) handleNotification('success', 'Making order services successfully!')
+        })
+    }
+
+    const handleSubmitOrder = () => {
+        handleOrderDishes()
+        handleOrderService()
+    }
+
+    useEffect(() => {
+        getData(DISHES_URL, (dishes) => {
+            const newDishes = dishes || defaultDishes;
+            setDishesMenu(newDishes);
+        });
+
+        getData(SERVICES_URL, (services) => {
+            const newServices = services || defaultServices;
+            setServiceMenu(newServices);
+        });
+    }, []);
 
     return (
         <div className={`${cx('wrapper')}`}>
@@ -93,15 +112,17 @@ function ServiceForm() {
                             <span>Food and Beverage</span>
                         </div>
 
-                        {selectedDishes.map((dish, index) => (
-                            <DishesItem
-                                key={index}
-                                item={dish}
-                                handleRemoveItem={(item) =>
-                                    handleRemoveItem(item, setSelectedDishes)
-                                }
-                            />
-                        ))}
+                        <div className={`${cx('items-wrapper')}`}>
+                            {selectedDishes.map((dish, index) => (
+                                <DishesItem
+                                    key={index}
+                                    item={dish}
+                                    handleRemoveItem={(item) =>
+                                        handleRemoveItem(item, setSelectedDishes)
+                                    }
+                                />
+                            ))}
+                        </div>
 
                         <AddServiceItemButton
                             label="Select food & beverage"
@@ -119,15 +140,17 @@ function ServiceForm() {
                         <div className={`${cx('sub-title')}`}>
                             <span>Services</span>
                         </div>
-                        {selectedServices.map((service, index) => (
-                            <ServiceItem
-                                key={index}
-                                item={service}
-                                handleRemoveItem={(item) =>
-                                    handleRemoveItem(item, setSelectedServices)
-                                }
-                            />
-                        ))}
+                        <div className={`${cx('items-wrapper')}`}>
+                            {selectedServices.map((service, index) => (
+                                <ServiceItem
+                                    key={index}
+                                    item={service}
+                                    handleRemoveItem={(item) =>
+                                        handleRemoveItem(item, setSelectedServices)
+                                    }
+                                />
+                            ))}
+                        </div>
 
                         <AddServiceItemButton
                             label="Select services"
@@ -141,14 +164,17 @@ function ServiceForm() {
                             }
                         />
                     </Grid>
+                </Grid>
+                <Grid container>
                     <Grid item xs={12} md={12}>
-                        <div className={`${cx('footer')}`}>
-                            <OutlinedButton
-                                style={{ margin: '0 1rem' }}
-                                label="Order now"
-                            />
-                            <OutlinedButton label="Skip" />
-                        </div>
+                            <div className={`${cx('footer')}`}>
+                                <OutlinedButton
+                                    style={{ margin: '0 1rem' }}
+                                    label="Order now"
+                                    onClick={handleSubmitOrder}
+                                />
+                                <OutlinedButton label="Skip" />
+                            </div>
                     </Grid>
                 </Grid>
             </form>

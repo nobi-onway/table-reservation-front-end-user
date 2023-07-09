@@ -17,9 +17,10 @@ import { getData, postData } from '../../../../services/apiService';
 import {
     CAPACITY_MASTER_DATA,
     CREATE_RESERVATION_URL,
-} from '../../../../services/constant';
+} from '../../../../services/apiConstant';
 import CustomizedSnackbars from '../../../../components/SnackBar';
 import useToast from '../../../../hooks/useToast';
+import { useCallback } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -88,12 +89,12 @@ function TableForm() {
 
     const venuesRef = useRef([])
 
-    const handleUpdateVenues = () => {
+    const handleUpdateVenues = useCallback( () => {
         const newVenues = venuesRef.current.filter(
             (venue) => venue.category === venueCategory,
         );
         setVenues(newVenues);
-    }
+    }, [venueCategory])
 
     const {
         isSnackBarOpen,
@@ -105,7 +106,7 @@ function TableForm() {
 
     useEffect(() => {
         handleUpdateVenues()
-    }, [venueCategory]);
+    }, [venueCategory, handleUpdateVenues]);
 
     useEffect(() => {
         getData(CAPACITY_MASTER_DATA, (res) => {
@@ -122,12 +123,13 @@ function TableForm() {
                 setVenue(newVenues[0]);
             }
         });
-    }, []);
+    }, [handleUpdateVenues]);
 
     const handleReserve = () => {
         const currentDate = dayjs(new Date());
 
         const reservation = {
+            username: 'customer12',
             capacityMasterDataId: venue.id,
             status: 'pending processing',
             numberOfGuest: numberOfPersons,
@@ -138,7 +140,8 @@ function TableForm() {
         };
 
         postData(CREATE_RESERVATION_URL, reservation, (res, error) => {
-            if (res.status == 200) {
+            console.log(res)
+            if (res.status === 200) {
                 handleResetInputData();
                 handleNotification(
                     'success',

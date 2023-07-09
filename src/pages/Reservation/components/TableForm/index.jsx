@@ -101,21 +101,21 @@ function TableForm() {
         setVenues(newVenues);
     }, [venueCategory]);
 
-    useEffect(() => {
-        getData(CAPACITY_MASTER_DATA, (res) => {
-            if (res.body) {
-                const newVenues = res.body.map((venue) => ({
-                    id: venue.capacityMasterDataId,
-                    name: venue.venue,
-                    img: venue.imageUrl,
-                    category: venue.category,
-                    capacity: venue.capacity,
-                }));
-                setVenues(newVenues);
-                setVenue(newVenues[0]);
-            }
-        });
-    }, []);
+    // useEffect(() => {
+    //     getData(CAPACITY_MASTER_DATA, (res) => {
+    //         if (res.body) {
+    //             const newVenues = res.body.map((venue) => ({
+    //                 id: venue.capacityMasterDataId,
+    //                 name: venue.venue,
+    //                 img: venue.imageUrl,
+    //                 category: venue.category,
+    //                 capacity: venue.capacity,
+    //             }));
+    //             setVenues(newVenues);
+    //             setVenue(newVenues[0]);
+    //         }
+    //     });
+    // }, []);
 
     const handleReserve = () => {
         const currentDate = dayjs(new Date());

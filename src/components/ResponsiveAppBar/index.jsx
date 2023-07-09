@@ -20,6 +20,7 @@ import { LOGIN_URL } from '../../services/apiConstant';
 import { useNavigate } from 'react-router-dom';
 import CustomizedSnackbars from '../SnackBar';
 import useToast from '../../hooks/useToast';
+import { AuthContext } from '../../store/Auth';
 
 const pages = [
     { name: 'HOME', path: '/home' },
@@ -42,13 +43,11 @@ const userAvatar = {
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
     const [isSignUpModalOpen, setIsSignUpModalOpen] = React.useState(false);
     const [avatar, setAvatar] = React.useState(guestAvatar);
     const [settings, setSettings] = React.useState([]);
-    const [isLogin, setIsLogin] = React.useState(
-        localStorage.getItem('username'),
-    );
+    const { token, login, logout, isLoginModalOpen, setIsLoginModalOpen } =
+        React.useContext(AuthContext);
     const navigate = useNavigate();
 
     const {
@@ -66,19 +65,21 @@ function ResponsiveAppBar() {
         ];
 
         const handleLogout = () => {
-            localStorage.removeItem('username');
-            setIsLogin(false);
+            logout();
             navigate('/home');
         };
 
         const userSettings = [
-            { title: `Hi! ${isLogin}`, handleOnClick: () => {} },
+            {
+                title: `Hi! ${JSON.parse(token)?.fullName}`,
+                handleOnClick: () => {},
+            },
             { title: 'Logout', handleOnClick: handleLogout },
         ];
 
-        setAvatar(() => (isLogin ? userAvatar : guestAvatar));
-        setSettings(() => (isLogin ? userSettings : guestSettings));
-    }, [isLogin, navigate]);
+        setAvatar(() => (token ? userAvatar : guestAvatar));
+        setSettings(() => (token ? userSettings : guestSettings));
+    }, [token, navigate]);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -97,11 +98,10 @@ function ResponsiveAppBar() {
 
     const handleSignIn = ({ username, password }) => {
         postData(LOGIN_URL, { username, password }, (res, error) => {
-            if (res.status === 200) {
-                localStorage.setItem('username', res.username);
-                setIsLogin(true);
-                setIsLoginModalOpen(false);
+            if (res) {
+                login(JSON.stringify(res));
                 navigate('/home');
+                setIsLoginModalOpen(false);
                 handleNotification('success', 'Login successful!');
             } else {
                 handleNotification('error', 'Login fail!');
@@ -260,7 +260,10 @@ function ResponsiveAppBar() {
             </AppBar>
             {isLoginModalOpen && (
                 <LoginModal
-                    handleModalClose={() => setIsLoginModalOpen(false)}
+                    handleModalClose={() => {
+                        navigate('/home');
+                        setIsLoginModalOpen(false);
+                    }}
                     handleOpenSignUpModal={() => {
                         setIsLoginModalOpen(false);
                         setIsSignUpModalOpen(true);
@@ -271,7 +274,10 @@ function ResponsiveAppBar() {
 
             {isSignUpModalOpen && (
                 <SignUpModal
-                    handleModalClose={() => setIsSignUpModalOpen(false)}
+                    handleModalClose={() => {
+                        navigate('/home');
+                        setIsSignUpModalOpen(false);
+                    }}
                     handleOpenSignInModal={() => {
                         setIsSignUpModalOpen(false);
                         setIsLoginModalOpen(true);

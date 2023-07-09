@@ -12,7 +12,7 @@ import classNames from 'classnames/bind';
 import TimePickerValue from '../TimePickerValue';
 import BasicTextFields from '../BasicTextFields';
 import TitlebarImageList from '../TitleBarImageList';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getData, postData } from '../../../../services/apiService';
 import {
     CAPACITY_MASTER_DATA,
@@ -86,6 +86,15 @@ function TableForm() {
     const [checkInTime, setCheckInTime] = useState(dayjs(new Date()));
     const [numberOfPersons, setNumberOfPersons] = useState();
 
+    const venuesRef = useRef([])
+
+    const handleUpdateVenues = () => {
+        const newVenues = venuesRef.current.filter(
+            (venue) => venue.category === venueCategory,
+        );
+        setVenues(newVenues);
+    }
+
     const {
         isSnackBarOpen,
         severity,
@@ -95,27 +104,25 @@ function TableForm() {
     } = useToast();
 
     useEffect(() => {
-        const newVenues = itemData.filter(
-            (venue) => venue.category === venueCategory,
-        );
-        setVenues(newVenues);
+        handleUpdateVenues()
     }, [venueCategory]);
 
-    // useEffect(() => {
-    //     getData(CAPACITY_MASTER_DATA, (res) => {
-    //         if (res.body) {
-    //             const newVenues = res.body.map((venue) => ({
-    //                 id: venue.capacityMasterDataId,
-    //                 name: venue.venue,
-    //                 img: venue.imageUrl,
-    //                 category: venue.category,
-    //                 capacity: venue.capacity,
-    //             }));
-    //             setVenues(newVenues);
-    //             setVenue(newVenues[0]);
-    //         }
-    //     });
-    // }, []);
+    useEffect(() => {
+        getData(CAPACITY_MASTER_DATA, (res) => {
+            if (res) {
+                const newVenues = res.map((venue) => ({
+                    id: venue.capacityMasterDataId,
+                    name: venue.venue,
+                    img: venue.imageUrl,
+                    category: venue.category,
+                    capacity: venue.capacity,
+                }));
+                venuesRef.current = newVenues
+                handleUpdateVenues()
+                setVenue(newVenues[0]);
+            }
+        });
+    }, []);
 
     const handleReserve = () => {
         const currentDate = dayjs(new Date());

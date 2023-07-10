@@ -62,7 +62,7 @@ function MyReservation() {
     const username = useRef(JSON.parse(token).username)
 
     useEffect(() => {
-        getData(`${RESERVATION_URL}/username?username=${username.current}`, (res) => {
+        getData(`${RESERVATION_URL}/username?username=${username.current}`, (res, error) => {
             if(res) 
             {
                 const newTabs = defaultTabs.map((tab) => {
@@ -84,6 +84,10 @@ function MyReservation() {
                     };
                 });
                 setTabs(newTabs);
+            }
+            if(error)
+            {
+                
             }
         });
     }, []);

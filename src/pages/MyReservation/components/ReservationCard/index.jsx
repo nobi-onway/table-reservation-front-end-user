@@ -53,7 +53,7 @@ function ReservationCard({ reservation }) {
                             <span className={`${cx('bold')} ${cx('m-4')}`}>
                                 Date:
                             </span>
-                            {new Date().toLocaleDateString('en-US', {
+                            {new Date(reservation.checkinDate).toLocaleDateString('en-US', {
                                 weekday: 'long',
                                 month: 'long',
                                 day: 'numeric',
@@ -67,7 +67,7 @@ function ReservationCard({ reservation }) {
                             <span className={`${cx('bold')} ${cx('m-4')}`}>
                                 Time:
                             </span>
-                            13:00
+                            {reservation.checkinTime}
                         </span>
                     </div>
                     <div className={`${cx('reservation-detail')}`}>
@@ -146,7 +146,7 @@ function ReservationCard({ reservation }) {
                         className={`${cx('bold')}`}
                         style={{ color: '#6f7681' }}
                     >
-                        {`Created ${new Date().toLocaleDateString('en-US', {
+                        {`Created ${new Date(reservation.createDate).toLocaleDateString('en-US', {
                             month: 'long',
                             day: 'numeric',
                             year: 'numeric',

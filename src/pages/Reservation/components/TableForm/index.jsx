@@ -86,7 +86,7 @@ function TableForm() {
     const [email, setEmail] = useState('');
     const [date, setDate] = useState(dayjs(new Date()));
     const [checkInTime, setCheckInTime] = useState(dayjs(new Date()));
-    const [numberOfPersons, setNumberOfPersons] = useState();
+    const [numberOfPersons, setNumberOfPersons] = useState(1);
     const { token } = useContext(AuthContext);
 
     const venuesRef = useRef([]);
@@ -135,24 +135,23 @@ function TableForm() {
 
         const reservation = {
             username: userRef.current.username,
-            capacityMasterDataId: venue.id,
-            status: { status },
+            capacityMasterDataId: venue.id + '',
+            status: status,
             numberOfGuest: numberOfPersons,
             createDate: `${currentDate.format('YYYY-MM-DD')}`,
-            checkinTime: `${date.format(
-                'YYYY-MM-DD',
-            )} ${checkInTime.hour()}:${checkInTime.minute()}`,
+            checkinTime: `${checkInTime.format('HH:mm:ss')}`,
+            checkinDate: `${date.format('YYYY-MM-DD')}`
         };
 
         postData(CREATE_RESERVATION_URL, reservation, (res, error) => {
-            console.log(res);
             if (res.status === 200) {
                 handleResetInputData();
                 handleNotification(
                     'success',
                     `Making reservation successfully!`,
                 );
-            } else {
+            }
+            if(res.status === 500) {
                 handleNotification('error', `Making reservation fail!`);
             }
         });
@@ -224,7 +223,7 @@ function TableForm() {
                         <BasicTextFields
                             value={numberOfPersons}
                             handleChange={(e) =>
-                                setNumberOfPersons(e.target.value)
+                                setNumberOfPersons(parseInt(e.target.value))
                             }
                             required
                             label="How many persons?"

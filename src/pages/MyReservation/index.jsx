@@ -62,8 +62,8 @@ function MyReservation() {
     const username = useRef(JSON.parse(token).username)
 
     useEffect(() => {
-        getData(`${RESERVATION_URL}/username?username=${username.current}`, (res) => {
-            if(res) 
+        getData(`${RESERVATION_URL}/username?username=${username.current}`, (res, error) => {
+            if(res.status === 200) 
             {
                 const newTabs = defaultTabs.map((tab) => {
                     const reservations = res.filter(
@@ -84,7 +84,10 @@ function MyReservation() {
                     };
                 });
                 setTabs(newTabs);
+            }else{
+                
             }
+            
         });
     }, []);
 

@@ -12,7 +12,7 @@ import classNames from 'classnames/bind';
 import TimePickerValue from '../TimePickerValue';
 import BasicTextFields from '../BasicTextFields';
 import TitlebarImageList from '../TitleBarImageList';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { getData, postData } from '../../../../services/apiService';
 import {
     CAPACITY_MASTER_DATA_URL,
@@ -21,6 +21,7 @@ import {
 import CustomizedSnackbars from '../../../../components/SnackBar';
 import useToast from '../../../../hooks/useToast';
 import { useCallback } from 'react';
+import { AuthContext } from '../../../../store/Auth';
 
 const cx = classNames.bind(styles);
 
@@ -86,8 +87,10 @@ function TableForm() {
     const [date, setDate] = useState(dayjs(new Date()));
     const [checkInTime, setCheckInTime] = useState(dayjs(new Date()));
     const [numberOfPersons, setNumberOfPersons] = useState();
+    const { token } = useContext(AuthContext);
 
     const venuesRef = useRef([]);
+    const userRef = useRef(JSON.parse(token));
 
     const handleUpdateVenues = useCallback(() => {
         const newVenues = venuesRef.current.filter(
@@ -128,10 +131,12 @@ function TableForm() {
     const handleReserve = () => {
         const currentDate = dayjs(new Date());
 
+        const status = numberOfPersons > 10 ? 'pending processing' : 'reserved';
+
         const reservation = {
-            username: 'customer12',
+            username: userRef.current.username,
             capacityMasterDataId: venue.id,
-            status: 'pending processing',
+            status: { status },
             numberOfGuest: numberOfPersons,
             createDate: `${currentDate.format('YYYY-MM-DD')}`,
             checkinTime: `${date.format(

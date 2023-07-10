@@ -24,8 +24,7 @@ import { AuthContext } from '../../store/Auth';
 
 const pages = [
     { name: 'HOME', path: '/home' },
-    { name: 'ABOUT', path: '/' },
-    { name: 'CONTACT', path: '/' },
+    { name: 'ABOUT', path: '/about' },
     { name: 'MAKE RESERVATION', path: '/reservation' },
     { name: 'MY RESERVATION', path: '/myReservation' },
 ];
@@ -98,7 +97,6 @@ function ResponsiveAppBar() {
 
     const handleSignIn = ({ username, password }) => {
         postData(LOGIN_URL, { username, password }, (res, error) => {
-            console.log(res)
             if (res) {
                 login(JSON.stringify(res));
                 navigate('/home');

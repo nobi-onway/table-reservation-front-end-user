@@ -63,7 +63,7 @@ function MyReservation() {
 
     useEffect(() => {
         getData(`${RESERVATION_URL}/username?username=${username.current}`, (res, error) => {
-            if(res) 
+            if(res.status === 200) 
             {
                 const newTabs = defaultTabs.map((tab) => {
                     const reservations = res.filter(
@@ -84,11 +84,10 @@ function MyReservation() {
                     };
                 });
                 setTabs(newTabs);
-            }
-            if(error)
-            {
+            }else{
                 
             }
+            
         });
     }, []);
 

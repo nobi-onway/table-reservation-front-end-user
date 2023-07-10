@@ -143,8 +143,6 @@ function TableForm() {
             checkinDate: `${date.format('YYYY-MM-DD')}`
         };
 
-        console.log(reservation);
-
         postData(CREATE_RESERVATION_URL, reservation, (res, error) => {
             if (res.status === 200) {
                 handleResetInputData();

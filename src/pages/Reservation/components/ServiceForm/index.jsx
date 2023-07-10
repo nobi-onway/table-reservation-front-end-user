@@ -41,7 +41,7 @@ const defaultDishes = [
     },
 ];
 
-function ServiceForm() {
+function ServiceForm({ handleCloseServiceForm }) {
     const [dishesMenu, setDishesMenu] = useState(defaultDishes);
     const [serviceMenu, setServiceMenu] = useState(defaultServices);
 
@@ -197,7 +197,10 @@ function ServiceForm() {
                                 label="Order now"
                                 onClick={handleSubmitOrder}
                             />
-                            <OutlinedButton label="Skip" />
+                            <OutlinedButton
+                                onClick={handleCloseServiceForm}
+                                label="Skip"
+                            />
                         </div>
                     </Grid>
                 </Grid>

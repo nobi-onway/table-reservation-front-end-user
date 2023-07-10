@@ -77,7 +77,7 @@ const Item = styled(Paper)(({ theme }) => ({
     height: '100%',
 }));
 
-function TableForm() {
+function TableForm({ handleOpenServiceForm, handleCloseServiceForm }) {
     const [venueCategory, setVenueCategory] = useState('Indoor');
     const [venues, setVenues] = useState(itemData);
     const [venue, setVenue] = useState({});
@@ -140,7 +140,7 @@ function TableForm() {
             numberOfGuest: numberOfPersons,
             createDate: `${currentDate.format('YYYY-MM-DD')}`,
             checkinTime: `${checkInTime.format('HH:mm:ss')}`,
-            checkinDate: `${date.format('YYYY-MM-DD')}`
+            checkinDate: `${date.format('YYYY-MM-DD')}`,
         };
 
         postData(CREATE_RESERVATION_URL, reservation, (res, error) => {
@@ -150,8 +150,10 @@ function TableForm() {
                     'success',
                     `Making reservation successfully!`,
                 );
+
+                if (numberOfPersons > 10) handleOpenServiceForm();
             }
-            if(res.status === 500) {
+            if (res.status === 500) {
                 handleNotification('error', `Making reservation fail!`);
             }
         });

@@ -1,5 +1,3 @@
-import SimplePaper from '../../components/SimplePaper';
-
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 

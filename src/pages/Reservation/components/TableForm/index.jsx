@@ -15,7 +15,7 @@ import TitlebarImageList from '../TitleBarImageList';
 import { useEffect, useState, useRef } from 'react';
 import { getData, postData } from '../../../../services/apiService';
 import {
-    CAPACITY_MASTER_DATA,
+    CAPACITY_MASTER_DATA_URL,
     CREATE_RESERVATION_URL,
 } from '../../../../services/apiConstant';
 import CustomizedSnackbars from '../../../../components/SnackBar';
@@ -87,14 +87,14 @@ function TableForm() {
     const [checkInTime, setCheckInTime] = useState(dayjs(new Date()));
     const [numberOfPersons, setNumberOfPersons] = useState();
 
-    const venuesRef = useRef([])
+    const venuesRef = useRef([]);
 
-    const handleUpdateVenues = useCallback( () => {
+    const handleUpdateVenues = useCallback(() => {
         const newVenues = venuesRef.current.filter(
             (venue) => venue.category === venueCategory,
         );
         setVenues(newVenues);
-    }, [venueCategory])
+    }, [venueCategory]);
 
     const {
         isSnackBarOpen,
@@ -105,11 +105,11 @@ function TableForm() {
     } = useToast();
 
     useEffect(() => {
-        handleUpdateVenues()
+        handleUpdateVenues();
     }, [venueCategory, handleUpdateVenues]);
 
     useEffect(() => {
-        getData(CAPACITY_MASTER_DATA, (res) => {
+        getData(CAPACITY_MASTER_DATA_URL, (res) => {
             if (res) {
                 const newVenues = res.map((venue) => ({
                     id: venue.capacityMasterDataId,
@@ -118,8 +118,8 @@ function TableForm() {
                     category: venue.category,
                     capacity: venue.capacity,
                 }));
-                venuesRef.current = newVenues
-                handleUpdateVenues()
+                venuesRef.current = newVenues;
+                handleUpdateVenues();
                 setVenue(newVenues[0]);
             }
         });
@@ -140,7 +140,7 @@ function TableForm() {
         };
 
         postData(CREATE_RESERVATION_URL, reservation, (res, error) => {
-            console.log(res)
+            console.log(res);
             if (res.status === 200) {
                 handleResetInputData();
                 handleNotification(

@@ -7,20 +7,42 @@ import RoomServiceOutlinedIcon from '@mui/icons-material/RoomServiceOutlined';
 import FoodBankOutlinedIcon from '@mui/icons-material/FoodBankOutlined';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import PriceCheckOutlinedIcon from '@mui/icons-material/PriceCheckOutlined';
+import PaidIcon from '@mui/icons-material/Paid';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import styles from './ReservationCard.module.scss';
 import classNames from 'classnames/bind';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function ReservationCard() {
+const reservation = {
+    imageUrl:
+        'https://pvu.thebluebook.com/inc/img/qp/2214759/lrg_the-orchid-banquet-hall.jpg',
+    createDate: '2023-06-03',
+    checkinTime: '2023-06-12 17:00:00.0',
+    venue: 'Cloudy Area',
+    numberOfGuest: 22,
+    serviceList: [],
+    dishList: [],
+    serviceAmount: 0,
+    dishAmount: 958.56,
+    depositAmount: 315.856,
+    status: 'pending deposit',
+};
+
+const notifyMessage = {
+    'pending deposit': 'Deposit to complete reservation',
+    'pending processing': 'Waiting for processing'
+}
+
+function ReservationCard({ reservation }) {
     return (
-        <Grid container className={`${cx('wrapper')}`}>
+        <Grid container className={`${cx('wrapper')} ${cx('m-b-4')}`}>
             <Grid item sm={2} md={2}>
                 <div className={`${cx('image-wrapper')}`}>
-                    <img alt='venue' src="https://pvu.thebluebook.com/inc/img/qp/2214759/lrg_the-orchid-banquet-hall.jpg" />
+                    <img alt="venue" src={reservation.imageUrl} />
                 </div>
             </Grid>
             <Grid item sm={4} md={4} style={{ padding: '1rem 0' }}>
@@ -54,7 +76,7 @@ function ReservationCard() {
                             <span className={`${cx('bold')} ${cx('m-4')}`}>
                                 Venue:
                             </span>
-                            Orchid Hall - Floor 1
+                            {reservation.venue}
                         </span>
                     </div>
                     <div className={`${cx('reservation-detail')}`}>
@@ -63,7 +85,7 @@ function ReservationCard() {
                             <span className={`${cx('bold')} ${cx('m-4')}`}>
                                 Persons:
                             </span>
-                            4 persons
+                            {reservation.numberOfGuest} persons
                         </span>
                     </div>
                 </div>
@@ -76,7 +98,7 @@ function ReservationCard() {
                             <span className={`${cx('bold')} ${cx('m-4')}`}>
                                 Service:
                             </span>
-                            None
+                            {reservation.serviceList.length > 0 ? 'View' : 'None'}
                         </span>
                     </div>
                     <div className={`${cx('reservation-detail')}`}>
@@ -85,7 +107,7 @@ function ReservationCard() {
                             <span className={`${cx('bold')} ${cx('m-4')}`}>
                                 Dishes:
                             </span>
-                            None
+                            {reservation.dishList.length > 0 ? 'View' : 'None'}
                         </span>
                     </div>
                     <div className={`${cx('reservation-detail')}`}>
@@ -94,7 +116,7 @@ function ReservationCard() {
                             <span className={`${cx('bold')} ${cx('m-4')}`}>
                                 Total estimate:
                             </span>
-                            None
+                            ${reservation.dishAmount}
                         </span>
                     </div>
                     <div className={`${cx('reservation-detail')}`}>
@@ -103,7 +125,7 @@ function ReservationCard() {
                             <span className={`${cx('bold')} ${cx('m-4')}`}>
                                 Deposit required:
                             </span>
-                            None
+                            ${reservation.depositAmount}
                         </span>
                     </div>
                 </div>
@@ -131,18 +153,39 @@ function ReservationCard() {
                         })}`}
                     </span>
                     <div>
-                        <Button
-                            style={{
-                                backgroundColor: 'red',
-                                fontSize: '1.2rem',
-                                fontWeight: '700',
-                            }}
-                            size="large"
-                            variant="contained"
-                            startIcon={<DeleteIcon />}
-                        >
-                            Cancel
-                        </Button>
+                        <span className={`${cx('notify-message')}`}>
+                            {notifyMessage[reservation.status]}
+                        </span>
+                        <div style={{ display: 'flex' }}>
+                            {(reservation.status === 'pending deposit') && <Button
+                                style={{
+                                    fontSize: '1.2rem',
+                                    fontWeight: '700',
+                                }}
+                                size="large"
+                                variant="contained"
+                                startIcon={<PaidIcon />}
+                            >
+                                Deposit
+                            </Button>}
+                            {(reservation.status !== 'done') && <Button
+                                style={{
+                                    backgroundColor: 'red',
+                                    fontSize: '1.2rem',
+                                    fontWeight: '700',
+                                    marginLeft: '1rem',
+                                }}
+                                size="large"
+                                variant="contained"
+                                startIcon={<DeleteIcon />}
+                            >
+                                Cancel
+                            </Button>}
+                            {(reservation.status === 'done') && 
+                            <Button style={{color: 'white', backgroundColor: 'green', fontSize: 'small'}} disabled variant="contained" color="success">
+                                DONE
+                            </Button>}
+                        </div>
                     </div>
                 </div>
             </Grid>

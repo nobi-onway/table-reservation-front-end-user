@@ -98,6 +98,7 @@ function ResponsiveAppBar() {
 
     const handleSignIn = ({ username, password }) => {
         postData(LOGIN_URL, { username, password }, (res, error) => {
+            console.log(res)
             if (res) {
                 login(JSON.stringify(res));
                 navigate('/home');

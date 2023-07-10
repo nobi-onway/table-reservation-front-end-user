@@ -32,9 +32,14 @@ const reservation = {
     status: 'pending deposit',
 };
 
+const notifyMessage = {
+    'pending deposit': 'Deposit to complete reservation',
+    'pending processing': 'Waiting for processing'
+}
+
 function ReservationCard({ reservation }) {
     return (
-        <Grid container className={`${cx('wrapper')}`}>
+        <Grid container className={`${cx('wrapper')} ${cx('m-b-4')}`}>
             <Grid item sm={2} md={2}>
                 <div className={`${cx('image-wrapper')}`}>
                     <img alt="venue" src={reservation.imageUrl} />
@@ -93,7 +98,7 @@ function ReservationCard({ reservation }) {
                             <span className={`${cx('bold')} ${cx('m-4')}`}>
                                 Service:
                             </span>
-                            {reservation.serviceList}
+                            {reservation.serviceList.length > 0 ? 'View' : 'None'}
                         </span>
                     </div>
                     <div className={`${cx('reservation-detail')}`}>
@@ -102,7 +107,7 @@ function ReservationCard({ reservation }) {
                             <span className={`${cx('bold')} ${cx('m-4')}`}>
                                 Dishes:
                             </span>
-                            {reservation.serviceList}
+                            {reservation.dishList.length > 0 ? 'View' : 'None'}
                         </span>
                     </div>
                     <div className={`${cx('reservation-detail')}`}>
@@ -149,10 +154,10 @@ function ReservationCard({ reservation }) {
                     </span>
                     <div>
                         <span className={`${cx('notify-message')}`}>
-                            Deposit to complete reservation{' '}
+                            {notifyMessage[reservation.status]}
                         </span>
                         <div style={{ display: 'flex' }}>
-                            <Button
+                            {(reservation.status === 'pending deposit') && <Button
                                 style={{
                                     fontSize: '1.2rem',
                                     fontWeight: '700',
@@ -162,8 +167,8 @@ function ReservationCard({ reservation }) {
                                 startIcon={<PaidIcon />}
                             >
                                 Deposit
-                            </Button>
-                            <Button
+                            </Button>}
+                            {(reservation.status !== 'done') && <Button
                                 style={{
                                     backgroundColor: 'red',
                                     fontSize: '1.2rem',
@@ -175,7 +180,11 @@ function ReservationCard({ reservation }) {
                                 startIcon={<DeleteIcon />}
                             >
                                 Cancel
-                            </Button>
+                            </Button>}
+                            {(reservation.status === 'done') && 
+                            <Button style={{color: 'white', backgroundColor: 'green', fontSize: 'small'}} disabled variant="contained" color="success">
+                                DONE
+                            </Button>}
                         </div>
                     </div>
                 </div>

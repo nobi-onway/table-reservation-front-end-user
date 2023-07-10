@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import Home from "../pages/Home";
 import MyReservation from "../pages/MyReservation";
+import Reservation from "../pages/Reservation";
 
 const EmptyPage = () => <Fragment />
 
@@ -15,7 +16,7 @@ const guestRoutes = [
     },
     {
         path: '/reservation',
-        component: Home,
+        component: Reservation,
     }
 ]
 

@@ -9,10 +9,6 @@ const EmptyPage = () => <Fragment />
 const guestRoutes = [
     {
         path: '/',
-        component: EmptyPage,
-    },
-    {
-        path: '/home',
         component: Home,
     },
     {

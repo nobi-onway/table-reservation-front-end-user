@@ -23,7 +23,7 @@ import useToast from '../../hooks/useToast';
 import { AuthContext } from '../../store/Auth';
 
 const pages = [
-    { name: 'HOME', path: '/home' },
+    { name: 'HOME', path: '/' },
     { name: 'ABOUT', path: '/about' },
     { name: 'MAKE RESERVATION', path: '/reservation' },
     { name: 'MY RESERVATION', path: '/myReservation' },
@@ -65,7 +65,7 @@ function ResponsiveAppBar() {
 
         const handleLogout = () => {
             logout();
-            navigate('/home');
+            navigate('/');
         };
 
         const userSettings = [
@@ -99,7 +99,7 @@ function ResponsiveAppBar() {
         postData(LOGIN_URL, { username, password }, (res, error) => {
             if (res) {
                 login(JSON.stringify(res));
-                navigate('/home');
+                navigate('/');
                 setIsLoginModalOpen(false);
                 handleNotification('success', 'Login successful!');
             } else {

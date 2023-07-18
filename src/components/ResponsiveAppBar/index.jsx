@@ -26,8 +26,14 @@ const pages = [
     { name: 'HOME', path: '/' },
     { name: 'ABOUT', path: '/about' },
     { name: 'MAKE RESERVATION', path: '/reservation' },
-    { name: 'MY RESERVATION', path: '/myReservation' },
+    { name: 'MY RESERVATIONS', path: '/myReservation' },
 ];
+
+const staffPages = [
+    { name: 'HOME', path: '/' },
+    { name: 'ABOUT', path: '/about' },
+    { name: 'MANAGE RESERVATIONS', path: '/staff-reservation' }
+]
 
 const guestAvatar = {
     alt: 'Guest Logo',
@@ -38,6 +44,11 @@ const userAvatar = {
     alt: 'User Logo',
     src: 'https://www.freepnglogos.com/uploads/chef-png/png-psd-download-chef-cook-vector-illustration-14.png',
 };
+
+const staffAvatar = {
+    alt: 'Staff Logo',
+    src: 'https://cdn-icons-png.flaticon.com/512/3789/3789820.png',
+}
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -76,7 +87,7 @@ function ResponsiveAppBar() {
             { title: 'Logout', handleOnClick: handleLogout },
         ];
 
-        setAvatar(() => (token ? userAvatar : guestAvatar));
+        setAvatar(() => (token ? (JSON.parse(token).username == "staff" ? staffAvatar : userAvatar) : guestAvatar));
         setSettings(() => (token ? userSettings : guestSettings));
     }, [token, navigate]);
 
@@ -96,15 +107,17 @@ function ResponsiveAppBar() {
     };
 
     const handleSignIn = ({ username, password }) => {
-        postData(LOGIN_URL, { username, password }, (res, error) => {
-            if (res) {
-                login(JSON.stringify(res));
-                navigate('/');
-                setIsLoginModalOpen(false);
-                handleNotification('success', 'Login successful!');
-            } else {
-                handleNotification('error', 'Login fail!');
+        postData(LOGIN_URL, { username, password }, (res) => {
+            if(!res.username)
+            {
+                handleNotification('error', 'username or password is not correct!');
+                return;
             }
+
+            login(JSON.stringify(res));
+            navigate('/');
+            setIsLoginModalOpen(false);
+            handleNotification('success', 'Login successful!');
         });
     };
 
@@ -164,7 +177,18 @@ function ResponsiveAppBar() {
                                     display: { xs: 'block', md: 'none' },
                                 }}
                             >
-                                {pages.map((page) => (
+                                {JSON.parse(token)?.username == 'staff' ?
+                                staffPages.map((page) => (
+                                    <Link key={page.name} to={page.path}>
+                                        <MenuItem onClick={handleCloseNavMenu}>
+                                            <Typography textAlign="center">
+                                                {page.name}
+                                            </Typography>
+                                        </MenuItem>
+                                    </Link>
+                                ))
+                                :
+                                pages.map((page) => (
                                     <Link key={page.name} to={page.path}>
                                         <MenuItem onClick={handleCloseNavMenu}>
                                             <Typography textAlign="center">
@@ -199,7 +223,23 @@ function ResponsiveAppBar() {
                                 display: { xs: 'none', md: 'flex' },
                             }}
                         >
-                            {pages.map((page) => (
+                            {JSON.parse(token)?.username === "staff" ?
+                            staffPages.map((page) => (
+                                <Link key={page.name} to={page.path}>
+                                    <Button
+                                        onClick={handleCloseNavMenu}
+                                        sx={{
+                                            my: 2,
+                                            color: 'white',
+                                            display: 'block',
+                                        }}
+                                    >
+                                        {page.name}
+                                    </Button>
+                                </Link>
+                            ))
+                            :
+                            pages.map((page) => (
                                 <Link key={page.name} to={page.path}>
                                     <Button
                                         onClick={handleCloseNavMenu}

@@ -17,6 +17,7 @@ import classNames from 'classnames/bind';
 import { useState, Fragment } from 'react';
 import DishesMenuPopup from '../DishesMenuPopup';
 import ServicesMenuPopup from '../ServicesMenuPopup';
+import { postData } from '../../../../services/apiService';
 const cx = classNames.bind(styles);
 
 // const reservation = {
@@ -71,6 +72,12 @@ const notifyMessage = {
 function ReservationCard({ reservation }) {
     const [isOpenDishesMenu, setIsOpenDishesMenu] = useState(false);
     const [isOpenServicesMenu, setIsOpenServicesMenu] = useState(false);
+
+    const handleChangeReservationStatus = (status) => {
+        postData(`${reservation.reservationId}/${status}`, "", (res) => {
+
+        })
+    }
 
     return (
         <Fragment>
@@ -233,6 +240,7 @@ function ReservationCard({ reservation }) {
                                         size="large"
                                         variant="contained"
                                         startIcon={<PaidIcon />}
+                                        onClick={() => handleChangeReservationStatus('deposit')}
                                     >
                                         Deposit
                                     </Button>
@@ -248,6 +256,7 @@ function ReservationCard({ reservation }) {
                                         size="large"
                                         variant="contained"
                                         startIcon={<DeleteIcon />}
+                                        onClick={() => handleChangeReservationStatus('cancel')}
                                     >
                                         Cancel
                                     </Button>
@@ -264,6 +273,20 @@ function ReservationCard({ reservation }) {
                                         color="success"
                                     >
                                         DONE
+                                    </Button>
+                                )}
+                                {reservation.status === 'cancelled' && (
+                                    <Button
+                                        style={{
+                                            color: 'white',
+                                            backgroundColor: 'red',
+                                            fontSize: 'small',
+                                        }}
+                                        disabled
+                                        variant="contained"
+                                        color="success"
+                                    >
+                                        CANCELLED
                                     </Button>
                                 )}
                             </div>

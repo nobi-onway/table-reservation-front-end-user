@@ -10,7 +10,7 @@ function getData(url, callback) {
     fetch(`${API_PATH}${url}`, options)
         .then((response) => response.json())
         .then(callback)
-        .catch(error => callback(error))
+        .catch(callback)
 }
 
 function postData(url, data, callback) {

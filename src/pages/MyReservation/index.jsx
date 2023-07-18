@@ -64,8 +64,8 @@ function MyReservation() {
     useEffect(() => {
         getData(
             `${RESERVATION_URL}/username?username=${username.current}`,
-            (res, error) => {
-                if (res.status === 200) {
+            (res) => {
+                if (res) {
                     const newTabs = defaultTabs.map((tab) => {
                         const reservations = res.filter((reservation) =>
                             tab.status.includes(reservation.status),
@@ -89,7 +89,6 @@ function MyReservation() {
                         };
                     });
                     setTabs(newTabs);
-                } else {
                 }
             },
         );

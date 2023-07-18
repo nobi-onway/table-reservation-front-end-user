@@ -18,8 +18,6 @@ import {
     CAPACITY_MASTER_DATA_URL,
     CREATE_RESERVATION_URL,
 } from '../../../../services/apiConstant';
-import CustomizedSnackbars from '../../../../components/SnackBar';
-import useToast from '../../../../hooks/useToast';
 import { useCallback } from 'react';
 import { AuthContext } from '../../../../store/Auth';
 
@@ -77,7 +75,7 @@ const Item = styled(Paper)(({ theme }) => ({
     height: '100%',
 }));
 
-function TableForm({ handleOpenServiceForm, handleCloseServiceForm }) {
+function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotify }) {
     const [venueCategory, setVenueCategory] = useState('Indoor');
     const [venues, setVenues] = useState(itemData);
     const [venue, setVenue] = useState({});
@@ -99,13 +97,6 @@ function TableForm({ handleOpenServiceForm, handleCloseServiceForm }) {
         setVenues(newVenues);
     }, [venueCategory]);
 
-    const {
-        isSnackBarOpen,
-        severity,
-        message,
-        handleNotification,
-        setIsSnackBarOpen,
-    } = useToast();
 
     useEffect(() => {
         handleUpdateVenues();
@@ -144,17 +135,15 @@ function TableForm({ handleOpenServiceForm, handleCloseServiceForm }) {
         };
 
         postData(CREATE_RESERVATION_URL, reservation, (res, error) => {
-            if (res.status === 200) {
+            
+            if (res) {
                 handleResetInputData();
-                handleNotification(
-                    'success',
-                    `Making reservation successfully!`,
-                );
+                handleSuccessNotify()
 
-                if (numberOfPersons > 10) handleOpenServiceForm();
+                if (numberOfPersons > 10) handleOpenServiceForm(res.reservationId);
             }
-            if (res.status === 500) {
-                handleNotification('error', `Making reservation fail!`);
+            if (error) {
+                handleFailNotify()
             }
         });
     };
@@ -264,12 +253,7 @@ function TableForm({ handleOpenServiceForm, handleCloseServiceForm }) {
                     </Grid>
                 </Grid>
             </form>
-            <CustomizedSnackbars
-                open={isSnackBarOpen}
-                handleClose={() => setIsSnackBarOpen(false)}
-                severity={severity}
-                message={message}
-            />
+            
         </div>
     );
 }

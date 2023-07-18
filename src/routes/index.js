@@ -13,13 +13,13 @@ const guestRoutes = [
         path: '/about',
         component: About,
     },
-    {
-        path: '/reservation',
-        component: Reservation,
-    }
 ]
 
 const userRoutes = [
+    {
+        path: '/reservation',
+        component: Reservation,
+    },
     {
         path: '/myReservation',
         component: MyReservation

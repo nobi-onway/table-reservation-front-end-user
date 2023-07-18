@@ -299,6 +299,7 @@ function ResponsiveAppBar() {
             {isLoginModalOpen && (
                 <LoginModal
                     handleModalClose={() => {
+                        navigate('/')
                         setIsLoginModalOpen(false);
                     }}
                     handleOpenSignUpModal={() => {

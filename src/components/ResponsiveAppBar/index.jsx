@@ -53,10 +53,9 @@ const staffAvatar = {
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [isSignUpModalOpen, setIsSignUpModalOpen] = React.useState(false);
     const [avatar, setAvatar] = React.useState(guestAvatar);
     const [settings, setSettings] = React.useState([]);
-    const { token, login, logout, isLoginModalOpen, setIsLoginModalOpen } =
+    const { token, login, logout, isLoginModalOpen, setIsLoginModalOpen, isSignUpModalOpen, setIsSignUpModalOpen } =
         React.useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -300,12 +299,11 @@ function ResponsiveAppBar() {
             {isLoginModalOpen && (
                 <LoginModal
                     handleModalClose={() => {
-                        navigate('/home');
                         setIsLoginModalOpen(false);
                     }}
                     handleOpenSignUpModal={() => {
-                        setIsLoginModalOpen(false);
                         setIsSignUpModalOpen(true);
+                        setIsLoginModalOpen(false);
                     }}
                     handleSignIn={handleSignIn}
                 />
@@ -314,7 +312,6 @@ function ResponsiveAppBar() {
             {isSignUpModalOpen && (
                 <SignUpModal
                     handleModalClose={() => {
-                        navigate('/home');
                         setIsSignUpModalOpen(false);
                     }}
                     handleOpenSignInModal={() => {

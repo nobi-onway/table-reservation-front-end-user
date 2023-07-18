@@ -52,7 +52,7 @@ function ServicesMenuPopup({ services, handleClosePopup }) {
                             </Grid>
                             <Grid item sx={4} sm={4} md={4}>
                                 <span className={`${cx('table-row')}`}>
-                                    {`$${service.totalPrice}`}
+                                    {`$${service.price}`}   
                                 </span>
                             </Grid>
                         </Fragment>

@@ -41,7 +41,7 @@ const defaultDishes = [
     },
 ];
 
-function ServiceForm({ handleCloseServiceForm }) {
+function ServiceForm({ handleCloseServiceForm, reservatioId }) {
     const [dishesMenu, setDishesMenu] = useState(defaultDishes);
     const [serviceMenu, setServiceMenu] = useState(defaultServices);
 
@@ -80,8 +80,8 @@ function ServiceForm({ handleCloseServiceForm }) {
             quantity: dish.quantity,
         }));
 
-        postData(ORDER_DISHES_URL, dishes, (res) => {
-            if (res.status === 200)
+        postData(`${reservatioId}/${ORDER_DISHES_URL}`, dishes, (res) => {
+            if (res)
                 handleNotification(
                     'success',
                     'Making order dishes successfully!',
@@ -94,8 +94,8 @@ function ServiceForm({ handleCloseServiceForm }) {
             serviceId: service.serviceId,
         }));
 
-        postData(ORDER_SERVICE_URL, services, (res) => {
-            if (res.status === 200)
+        postData(`${reservatioId}/${ORDER_SERVICE_URL}`, services, (res) => {
+            if (res)
                 handleNotification(
                     'success',
                     'Making order services successfully!',
@@ -106,6 +106,7 @@ function ServiceForm({ handleCloseServiceForm }) {
     const handleSubmitOrder = () => {
         handleOrderDishes();
         handleOrderService();
+        handleCloseServiceForm();
     };
 
     useEffect(() => {

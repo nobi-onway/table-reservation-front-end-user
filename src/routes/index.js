@@ -1,10 +1,8 @@
-import { Fragment } from "react";
 import Home from "../pages/Home";
 import MyReservation from "../pages/MyReservation";
 import Reservation from "../pages/Reservation";
 import About from "../pages/About";
-
-const EmptyPage = () => <Fragment />
+import ManageReservation from "../pages/ManageReservation";
 
 const guestRoutes = [
     {
@@ -25,6 +23,10 @@ const userRoutes = [
     {
         path: '/myReservation',
         component: MyReservation
+    },
+    {
+        path: '/staff-reservation',
+        component: ManageReservation
     }
 ]
 

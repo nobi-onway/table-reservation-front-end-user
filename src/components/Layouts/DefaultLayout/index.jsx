@@ -6,7 +6,9 @@ function DefaultLayout({ children }) {
     return (
         <Fragment>
             <Header />
-            {children}
+            <div style={{height: '100vh'}}>
+                {children}
+            </div>
             <Footer/>
         </Fragment>
     );

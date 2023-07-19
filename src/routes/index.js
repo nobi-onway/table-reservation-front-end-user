@@ -3,6 +3,7 @@ import MyReservation from "../pages/MyReservation";
 import Reservation from "../pages/Reservation";
 import About from "../pages/About";
 import ManageReservation from "../pages/ManageReservation";
+import UserProfile from "../pages/UserProfile";
 
 const guestRoutes = [
     {
@@ -21,8 +22,8 @@ const userRoutes = [
         component: Reservation,
     },
     {
-        path: '/myReservation',
-        component: MyReservation
+        path: '/user-profile',
+        component: UserProfile
     },
     {
         path: '/staff-reservation',

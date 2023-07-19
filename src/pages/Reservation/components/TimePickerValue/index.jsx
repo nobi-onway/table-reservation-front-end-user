@@ -1,7 +1,6 @@
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import dayjs from 'dayjs';
 
 export default function TimePickerValue({ label, value, onChange, minutesStep, minTime, maxTime }) {
     return (

@@ -26,7 +26,6 @@ const pages = [
     { name: 'HOME', path: '/' },
     { name: 'ABOUT', path: '/about' },
     { name: 'MAKE RESERVATION', path: '/reservation' },
-    { name: 'MY RESERVATIONS', path: '/myReservation' },
 ];
 
 const staffPages = [
@@ -81,7 +80,7 @@ function ResponsiveAppBar() {
         const userSettings = [
             {
                 title: `Hi! ${JSON.parse(token)?.fullName}`,
-                handleOnClick: () => {},
+                handleOnClick: () => {navigate("/user-profile")},
             },
             { title: 'Logout', handleOnClick: handleLogout },
         ];

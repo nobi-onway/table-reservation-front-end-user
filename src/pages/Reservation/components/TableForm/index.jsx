@@ -95,7 +95,7 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
             setNumberOfPersons(preState => preState > res ? res : preState)
             setAvailableCapacity(res)
         })
-    })
+    }, [checkInTime, date, venue])
 
     const handleUpdateVenues = useCallback(() => {
         const newVenues = venuesRef.current.filter(

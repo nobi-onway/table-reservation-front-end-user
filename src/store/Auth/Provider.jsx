@@ -4,6 +4,7 @@ import Context from './Context';
 function Provider({ children }) {
     const [token, setToken] = useState(localStorage.getItem('token') || null);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
     const login = (authToken) => {
         localStorage.setItem('token', authToken);
@@ -23,6 +24,8 @@ function Provider({ children }) {
                 logout,
                 isLoginModalOpen,
                 setIsLoginModalOpen,
+                isSignUpModalOpen,
+                setIsSignUpModalOpen
             }}
         >
             {children}

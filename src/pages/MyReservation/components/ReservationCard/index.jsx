@@ -74,8 +74,8 @@ function ReservationCard({ reservation }) {
     const [isOpenServicesMenu, setIsOpenServicesMenu] = useState(false);
 
     const handleChangeReservationStatus = (status) => {
-        postData(`${reservation.reservationId}/${status}`, "", (res) => {
-
+        postData(`/${reservation.reservationId}/${status}`, "", (res) => {
+            
         })
     }
 
@@ -245,7 +245,7 @@ function ReservationCard({ reservation }) {
                                         Deposit
                                     </Button>
                                 )}
-                                {reservation.status !== 'done' && (
+                                {reservation.status !== 'done' && reservation.status !== 'cancelled' && (
                                     <Button
                                         style={{
                                             backgroundColor: 'red',

@@ -34,7 +34,7 @@ function App() {
                     return (
                         <Route
                             key={index}
-                            path="/myReservation"
+                            path={route.path}
                             Component={() => {
                                 if (!token) setIsLoginModalOpen(true)
 

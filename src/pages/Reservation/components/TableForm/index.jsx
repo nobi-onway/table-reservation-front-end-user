@@ -17,6 +17,7 @@ import { getData, postData } from '../../../../services/apiService';
 import {
     CAPACITY_MASTER_DATA_URL,
     CREATE_RESERVATION_URL,
+    GET_CAPACITY_FROM_RESERVATION
 } from '../../../../services/apiConstant';
 import { useCallback } from 'react';
 import { AuthContext } from '../../../../store/Auth';
@@ -79,16 +80,22 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
     const [venueCategory, setVenueCategory] = useState('Indoor');
     const [venues, setVenues] = useState(itemData);
     const [venue, setVenue] = useState({});
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
     const [date, setDate] = useState(dayjs(new Date()));
     const [checkInTime, setCheckInTime] = useState(dayjs(new Date()));
     const [numberOfPersons, setNumberOfPersons] = useState(1);
+    const [availableCapacity, setAvailableCapacity] = useState(0)
     const { token } = useContext(AuthContext);
 
     const venuesRef = useRef([]);
     const userRef = useRef(JSON.parse(token));
+
+    const handleUpdateAvailableCapacity = useCallback(() => {
+        getData(`${GET_CAPACITY_FROM_RESERVATION}?checkinDate=${date.format('YYYY-MM-DD')}&checkinTime=${checkInTime.format('HH:mm:ss')}&capacityMasterDataId=${venue.id}`, (res) => {
+            
+            setNumberOfPersons(preState => preState > res ? res : preState)
+            setAvailableCapacity(res)
+        })
+    })
 
     const handleUpdateVenues = useCallback(() => {
         const newVenues = venuesRef.current.filter(
@@ -120,8 +127,6 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
     }, [handleUpdateVenues]);
 
     const handleReserve = () => {
-        const currentDate = dayjs(new Date());
-
         const status = numberOfPersons > 10 ? 'pending processing' : 'reserved';
 
         const reservation = {
@@ -129,7 +134,7 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
             capacityMasterDataId: venue.id + '',
             status: status,
             numberOfGuest: numberOfPersons,
-            createDate: `${currentDate.format('YYYY-MM-DD')}`,
+            createDate: `${date.format('YYYY-MM-DD')}`,
             checkinTime: `${checkInTime.format('HH:mm:ss')}`,
             checkinDate: `${date.format('YYYY-MM-DD')}`,
         };
@@ -149,9 +154,6 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
     };
 
     const handleResetInputData = () => {
-        setName('');
-        setEmail('');
-        setPhone('');
         setNumberOfPersons('');
         setCheckInTime(dayjs(new Date()));
         setDate(dayjs(new Date()));
@@ -164,27 +166,27 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
                 <Grid container spacing={2}>
                     <Grid item sm={6} md={4}>
                         <BasicTextFields
-                            value={name}
-                            handleChange={(e) => setName(e.target.value)}
+                            value={userRef.current.fullName}
                             required
+                            disabled
                             label="Your name"
                             type="text"
                         />
                     </Grid>
                     <Grid item sm={6} md={4}>
                         <BasicTextFields
-                            value={phone}
-                            handleChange={(e) => setPhone(e.target.value)}
+                            value={userRef.current.phone}
                             required
+                            disabled
                             label="Contact number"
                             type="number"
                         />
                     </Grid>
                     <Grid item sm={6} md={4}>
                         <BasicTextFields
-                            value={email}
-                            handleChange={(e) => setEmail(e.target.value)}
+                            value={userRef.current.email}
                             required
+                            disabled
                             label="Email"
                             type="email"
                         />
@@ -194,6 +196,7 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
                             <DatePicker
                                 value={date}
                                 onChange={(value) => {
+                                    handleUpdateAvailableCapacity();
                                     setDate(value);
                                 }}
                                 sx={{ width: '100%' }}
@@ -204,20 +207,28 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
                         <TimePickerValue
                             value={checkInTime}
                             onChange={(value) => {
+                                handleUpdateAvailableCapacity()
                                 setCheckInTime(value);
                             }}
                             required
+                            minutesStep={30}
+                            minTime={dayjs().set('hour', 8)}
+                            maxTime={dayjs().set('hour', 22)}
                             label="Check In"
                         />
                     </Grid>
                     <Grid item sm={6} md={4}>
                         <BasicTextFields
                             value={numberOfPersons}
-                            handleChange={(e) =>
-                                setNumberOfPersons(parseInt(e.target.value))
-                            }
+                            handleChange={(e) => {
+                                const newNumber = parseInt(e.target.value)
+                                
+                                if(newNumber > availableCapacity) return
+
+                                setNumberOfPersons(newNumber)
+                            }}
                             required
-                            label="How many persons?"
+                            label={`How many persons? (${availableCapacity} capacities are available)`}
                             type="number"
                         />
                     </Grid>
@@ -227,6 +238,7 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
                                 itemData={venues}
                                 title={venueCategory}
                                 handleOnSelected={(item) => {
+                                    handleUpdateAvailableCapacity()
                                     setVenue(item);
                                 }}
                                 selectedVenue={venue}

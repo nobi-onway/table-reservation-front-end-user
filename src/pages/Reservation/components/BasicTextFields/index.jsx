@@ -4,6 +4,8 @@ import TextField from '@mui/material/TextField';
 
 export default function BasicTextFields({
     required,
+    readOnly,
+    disabled,
     label,
     type,
     handleChange,
@@ -22,6 +24,8 @@ export default function BasicTextFields({
                 value={value}
                 onChange={handleChange}
                 required={required}
+                readOnly={readOnly}
+                disabled={disabled}
                 id="outlined-basic"
                 label={label}
                 variant="outlined"

@@ -39,7 +39,7 @@ function DishesMenuPopup({ dishes, handleClosePopup }) {
                     </Grid>
                 </Grid>
 
-                <Grid container>
+                <Grid container style={{overflowY: 'scroll'}}>
                     {dishes.map((dish) => (
                         <Fragment>
                             <Grid

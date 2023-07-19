@@ -3,7 +3,6 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import classNames from 'classnames/bind';
 import styles from './ServiceItem.module.scss';
-import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 

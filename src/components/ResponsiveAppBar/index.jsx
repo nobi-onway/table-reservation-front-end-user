@@ -87,7 +87,7 @@ function ResponsiveAppBar() {
 
         setAvatar(() =>
             token
-                ? JSON.parse(token).username == 'staff'
+                ? JSON.parse(token).username === 'staff'
                     ? staffAvatar
                     : userAvatar
                 : guestAvatar,

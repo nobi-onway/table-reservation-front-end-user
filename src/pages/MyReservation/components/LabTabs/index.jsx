@@ -13,7 +13,7 @@ export default function LabTabs({ tabs, defaultTab }) {
     };
 
     return (
-        <Box sx={{ width: '100%', typography: 'body1' }}>
+        <Box sx={{ width: '100%', typography: 'body1'}}>
             <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList
@@ -30,7 +30,7 @@ export default function LabTabs({ tabs, defaultTab }) {
                     </TabList>
                 </Box>
                 {tabs.map((tab, index) => (
-                    <TabPanel key={index} value={tab.value}>
+                    <TabPanel sx={{overflowY: "scroll", height: '80vh'}} key={index} value={tab.value}>
                         {tab.children}
                     </TabPanel>
                 ))}

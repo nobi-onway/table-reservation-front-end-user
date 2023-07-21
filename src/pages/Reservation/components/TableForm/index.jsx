@@ -154,9 +154,10 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
     };
 
     const handleResetInputData = () => {
-        setNumberOfPersons('');
-        setCheckInTime(dayjs(new Date()));
-        setDate(dayjs(new Date()));
+        setNumberOfPersons(1);
+        setAvailableCapacity(0)
+        setCheckInTime(null);
+        setDate(null);
     };
 
     return (

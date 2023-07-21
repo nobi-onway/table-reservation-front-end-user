@@ -1,5 +1,4 @@
 import Home from "../pages/Home";
-import MyReservation from "../pages/MyReservation";
 import Reservation from "../pages/Reservation";
 import About from "../pages/About";
 import ManageReservation from "../pages/ManageReservation";

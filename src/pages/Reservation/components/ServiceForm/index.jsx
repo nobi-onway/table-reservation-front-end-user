@@ -14,8 +14,7 @@ import {
 import ServiceItem from '../ServiceItem';
 import AddServiceItemButton from '../AddServiceItemButton';
 import DishesItem from '../DishesItem';
-import CustomizedSnackbars from '../../../../components/SnackBar';
-import useToast from '../../../../hooks/useToast';
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -48,14 +47,6 @@ function ServiceForm({ handleCloseServiceForm, reservatioId }) {
     const [selectedDishes, setSelectedDishes] = useState([]);
     const [selectedServices, setSelectedServices] = useState([]);
 
-    const {
-        isSnackBarOpen,
-        severity,
-        message,
-        handleNotification,
-        setIsSnackBarOpen,
-    } = useToast();
-
     const handleRemoveItem = (item, setSelectedItems) => {
         setSelectedItems((preState) =>
             preState.filter((i) => i.name !== item.name),
@@ -66,7 +57,7 @@ function ServiceForm({ handleCloseServiceForm, reservatioId }) {
         let addedItem = items.find((i) => i.name === item.name);
 
         if (addedItem) {
-            handleNotification('warning', 'Item has already added');
+            toast.warning('Item has already added!!!');
             return;
         }
 
@@ -81,11 +72,7 @@ function ServiceForm({ handleCloseServiceForm, reservatioId }) {
         }));
 
         postData(`${reservatioId}/${ORDER_DISHES_URL}`, dishes, (res) => {
-            if (res)
-                handleNotification(
-                    'success',
-                    'Making order dishes successfully!',
-                );
+            if (res) toast.success('Making order dishes successfully!');
         });
     };
 
@@ -95,11 +82,7 @@ function ServiceForm({ handleCloseServiceForm, reservatioId }) {
         }));
 
         postData(`${reservatioId}/${ORDER_SERVICE_URL}`, services, (res) => {
-            if (res)
-                handleNotification(
-                    'success',
-                    'Making order services successfully!',
-                );
+            if (res) toast.success('Making order services successfully!');
         });
     };
 
@@ -206,12 +189,6 @@ function ServiceForm({ handleCloseServiceForm, reservatioId }) {
                     </Grid>
                 </Grid>
             </form>
-            <CustomizedSnackbars
-                open={isSnackBarOpen}
-                handleClose={() => setIsSnackBarOpen(false)}
-                severity={severity}
-                message={message}
-            />
         </div>
     );
 }

@@ -3,11 +3,10 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { useState } from 'react';
-import CustomizedSnackbars from '../../components/SnackBar';
-import useToast from '../../hooks/useToast';
 
 import styles from './Reservation.module.scss';
 import classNames from 'classnames/bind';
+import { toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -20,23 +19,14 @@ const Item = styled(Paper)(({ theme }) => ({
     height: '100%',
 }));
 function Reservation() {
-    const [reservationId, setReservationId] = useState(null)
-
-    const {
-        isSnackBarOpen,
-        severity,
-        message,
-        handleNotification,
-        setIsSnackBarOpen,
-    } = useToast();
-    
+    const [reservationId, setReservationId] = useState(null);
 
     const handleOpenServiceForm = (reservationId) => {
-        setReservationId(reservationId)
+        setReservationId(reservationId);
     };
 
     const handleCloseServiceForm = () => {
-        setReservationId(null)
+        setReservationId(null);
     };
 
     return (
@@ -46,11 +36,14 @@ function Reservation() {
                     <Item>
                         {reservationId || (
                             <TableForm
-                                handleSuccessNotify={() => handleNotification(
-                                    'success',
-                                    `Making reservation successfully!`,
-                                )}
-                                handleFailNotify={() => handleNotification('error', `Making reservation fail!`)}
+                                handleSuccessNotify={() =>
+                                    toast.success(
+                                        `Making reservation successfully!`,
+                                    )
+                                }
+                                handleFailNotify={() =>
+                                    toast.error(`Making reservation fail!`)
+                                }
                                 handleOpenServiceForm={handleOpenServiceForm}
                             />
                         )}
@@ -62,13 +55,6 @@ function Reservation() {
                         )}
                     </Item>
                 </Grid>
-
-                <CustomizedSnackbars
-                open={isSnackBarOpen}
-                handleClose={() => setIsSnackBarOpen(false)}
-                severity={severity}
-                message={message}
-            />
             </Grid>
         </div>
     );

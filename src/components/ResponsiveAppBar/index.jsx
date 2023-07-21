@@ -18,9 +18,8 @@ import SignUpModal from '../SignUpModal';
 import { postData } from '../../services/apiService';
 import { LOGIN_URL } from '../../services/apiConstant';
 import { useNavigate } from 'react-router-dom';
-import CustomizedSnackbars from '../SnackBar';
-import useToast from '../../hooks/useToast';
 import { AuthContext } from '../../store/Auth';
+import { toast } from 'react-toastify';
 
 const pages = [
     { name: 'HOME', path: '/' },
@@ -31,8 +30,8 @@ const pages = [
 const staffPages = [
     { name: 'HOME', path: '/' },
     { name: 'ABOUT', path: '/about' },
-    { name: 'MANAGE RESERVATIONS', path: '/staff-reservation' }
-]
+    { name: 'MANAGE RESERVATIONS', path: '/staff-reservation' },
+];
 
 const guestAvatar = {
     alt: 'Guest Logo',
@@ -47,24 +46,23 @@ const userAvatar = {
 const staffAvatar = {
     alt: 'Staff Logo',
     src: 'https://cdn-icons-png.flaticon.com/512/3789/3789820.png',
-}
+};
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [avatar, setAvatar] = React.useState(guestAvatar);
     const [settings, setSettings] = React.useState([]);
-    const { token, login, logout, isLoginModalOpen, setIsLoginModalOpen, isSignUpModalOpen, setIsSignUpModalOpen } =
-        React.useContext(AuthContext);
-    const navigate = useNavigate();
-
     const {
-        isSnackBarOpen,
-        severity,
-        message,
-        handleNotification,
-        setIsSnackBarOpen,
-    } = useToast();
+        token,
+        login,
+        logout,
+        isLoginModalOpen,
+        setIsLoginModalOpen,
+        isSignUpModalOpen,
+        setIsSignUpModalOpen,
+    } = React.useContext(AuthContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const guestSettings = [
@@ -80,12 +78,20 @@ function ResponsiveAppBar() {
         const userSettings = [
             {
                 title: `Hi! ${JSON.parse(token)?.fullName}`,
-                handleOnClick: () => {navigate("/user-profile")},
+                handleOnClick: () => {
+                    navigate('/user-profile');
+                },
             },
             { title: 'Logout', handleOnClick: handleLogout },
         ];
 
-        setAvatar(() => (token ? (JSON.parse(token).username == "staff" ? staffAvatar : userAvatar) : guestAvatar));
+        setAvatar(() =>
+            token
+                ? JSON.parse(token).username == 'staff'
+                    ? staffAvatar
+                    : userAvatar
+                : guestAvatar,
+        );
         setSettings(() => (token ? userSettings : guestSettings));
     }, [token, navigate]);
 
@@ -106,16 +112,19 @@ function ResponsiveAppBar() {
 
     const handleSignIn = ({ username, password }) => {
         postData(LOGIN_URL, { username, password }, (res) => {
-            if(!res.username)
-            {
-                handleNotification('error', 'username or password is not correct!');
+            if (!res.username) {
+                toast.error('Uncorrect username or password', {
+                    position: 'top-right',
+                });
                 return;
             }
 
             login(JSON.stringify(res));
             navigate('/');
             setIsLoginModalOpen(false);
-            handleNotification('success', 'Login successful!');
+            toast.success('Login successfully', {
+                position: 'top-right',
+            });
         });
     };
 
@@ -175,26 +184,29 @@ function ResponsiveAppBar() {
                                     display: { xs: 'block', md: 'none' },
                                 }}
                             >
-                                {JSON.parse(token)?.username == 'staff' ?
-                                staffPages.map((page) => (
-                                    <Link key={page.name} to={page.path}>
-                                        <MenuItem onClick={handleCloseNavMenu}>
-                                            <Typography textAlign="center">
-                                                {page.name}
-                                            </Typography>
-                                        </MenuItem>
-                                    </Link>
-                                ))
-                                :
-                                pages.map((page) => (
-                                    <Link key={page.name} to={page.path}>
-                                        <MenuItem onClick={handleCloseNavMenu}>
-                                            <Typography textAlign="center">
-                                                {page.name}
-                                            </Typography>
-                                        </MenuItem>
-                                    </Link>
-                                ))}
+                                {JSON.parse(token)?.username == 'staff'
+                                    ? staffPages.map((page) => (
+                                          <Link key={page.name} to={page.path}>
+                                              <MenuItem
+                                                  onClick={handleCloseNavMenu}
+                                              >
+                                                  <Typography textAlign="center">
+                                                      {page.name}
+                                                  </Typography>
+                                              </MenuItem>
+                                          </Link>
+                                      ))
+                                    : pages.map((page) => (
+                                          <Link key={page.name} to={page.path}>
+                                              <MenuItem
+                                                  onClick={handleCloseNavMenu}
+                                              >
+                                                  <Typography textAlign="center">
+                                                      {page.name}
+                                                  </Typography>
+                                              </MenuItem>
+                                          </Link>
+                                      ))}
                             </Menu>
                         </Box>
                         <Typography
@@ -221,36 +233,35 @@ function ResponsiveAppBar() {
                                 display: { xs: 'none', md: 'flex' },
                             }}
                         >
-                            {JSON.parse(token)?.username === "staff" ?
-                            staffPages.map((page) => (
-                                <Link key={page.name} to={page.path}>
-                                    <Button
-                                        onClick={handleCloseNavMenu}
-                                        sx={{
-                                            my: 2,
-                                            color: 'white',
-                                            display: 'block',
-                                        }}
-                                    >
-                                        {page.name}
-                                    </Button>
-                                </Link>
-                            ))
-                            :
-                            pages.map((page) => (
-                                <Link key={page.name} to={page.path}>
-                                    <Button
-                                        onClick={handleCloseNavMenu}
-                                        sx={{
-                                            my: 2,
-                                            color: 'white',
-                                            display: 'block',
-                                        }}
-                                    >
-                                        {page.name}
-                                    </Button>
-                                </Link>
-                            ))}
+                            {JSON.parse(token)?.username === 'staff'
+                                ? staffPages.map((page) => (
+                                      <Link key={page.name} to={page.path}>
+                                          <Button
+                                              onClick={handleCloseNavMenu}
+                                              sx={{
+                                                  my: 2,
+                                                  color: 'white',
+                                                  display: 'block',
+                                              }}
+                                          >
+                                              {page.name}
+                                          </Button>
+                                      </Link>
+                                  ))
+                                : pages.map((page) => (
+                                      <Link key={page.name} to={page.path}>
+                                          <Button
+                                              onClick={handleCloseNavMenu}
+                                              sx={{
+                                                  my: 2,
+                                                  color: 'white',
+                                                  display: 'block',
+                                              }}
+                                          >
+                                              {page.name}
+                                          </Button>
+                                      </Link>
+                                  ))}
                         </Box>
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
@@ -298,7 +309,7 @@ function ResponsiveAppBar() {
             {isLoginModalOpen && (
                 <LoginModal
                     handleModalClose={() => {
-                        navigate('/')
+                        navigate('/');
                         setIsLoginModalOpen(false);
                     }}
                     handleOpenSignUpModal={() => {
@@ -320,13 +331,6 @@ function ResponsiveAppBar() {
                     }}
                 />
             )}
-
-            <CustomizedSnackbars
-                open={isSnackBarOpen}
-                handleClose={() => setIsSnackBarOpen(false)}
-                severity={severity}
-                message={message}
-            />
         </Fragment>
     );
 }

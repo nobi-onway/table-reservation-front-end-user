@@ -17,7 +17,7 @@ import { getData, postData } from '../../../../services/apiService';
 import {
     CAPACITY_MASTER_DATA_URL,
     CREATE_RESERVATION_URL,
-    GET_CAPACITY_FROM_RESERVATION
+    GET_CAPACITY_FROM_RESERVATION,
 } from '../../../../services/apiConstant';
 import { useCallback } from 'react';
 import { AuthContext } from '../../../../store/Auth';
@@ -76,27 +76,40 @@ const Item = styled(Paper)(({ theme }) => ({
     height: '100%',
 }));
 
-function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotify }) {
+function TableForm({
+    handleOpenServiceForm,
+    handleSuccessNotify,
+    handleFailNotify,
+}) {
     const [venueCategory, setVenueCategory] = useState('Indoor');
     const [venues, setVenues] = useState(itemData);
     const [venue, setVenue] = useState({});
     const [date, setDate] = useState();
     const [checkInTime, setCheckInTime] = useState();
     const [numberOfPersons, setNumberOfPersons] = useState(1);
-    const [availableCapacity, setAvailableCapacity] = useState(0)
+    const [availableCapacity, setAvailableCapacity] = useState(0);
     const { token } = useContext(AuthContext);
 
     const venuesRef = useRef([]);
     const userRef = useRef(JSON.parse(token));
 
     const handleUpdateAvailableCapacity = useCallback(() => {
-        if(!date || !checkInTime) return
+        if (!date || !checkInTime || !venue.id) return;
 
-        getData(`${GET_CAPACITY_FROM_RESERVATION}?checkinDate=${date.format('YYYY-MM-DD')}&checkinTime=${checkInTime.format('HH:mm:ss')}&capacityMasterDataId=${venue.id}`, (res) => {
-            setNumberOfPersons(preState => preState > res ? res : preState)
-            setAvailableCapacity(res)
-        })
-    }, [checkInTime, date, venue])
+        getData(
+            `${GET_CAPACITY_FROM_RESERVATION}?checkinDate=${date.format(
+                'YYYY-MM-DD',
+            )}&checkinTime=${checkInTime.format(
+                'HH:mm:ss',
+            )}&capacityMasterDataId=${venue.id}`,
+            (res) => {
+                setNumberOfPersons((preState) =>
+                    preState > res ? res : preState,
+                );
+                setAvailableCapacity(res);
+            },
+        );
+    }, [checkInTime, date, venue]);
 
     const handleUpdateVenues = useCallback(() => {
         const newVenues = venuesRef.current.filter(
@@ -104,7 +117,6 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
         );
         setVenues(newVenues);
     }, [venueCategory]);
-
 
     useEffect(() => {
         handleUpdateVenues();
@@ -140,22 +152,22 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
         };
 
         postData(CREATE_RESERVATION_URL, reservation, (res, error) => {
-            
             if (res) {
                 handleResetInputData();
-                handleSuccessNotify()
+                handleSuccessNotify();
 
-                if (numberOfPersons > 10) handleOpenServiceForm(res.reservationId);
+                if (numberOfPersons > 10)
+                    handleOpenServiceForm(res.reservationId);
             }
             if (error) {
-                handleFailNotify()
+                handleFailNotify();
             }
         });
     };
 
     const handleResetInputData = () => {
         setNumberOfPersons(1);
-        setAvailableCapacity(0)
+        setAvailableCapacity(0);
         setCheckInTime(null);
         setDate(null);
     };
@@ -208,7 +220,7 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
                         <TimePickerValue
                             value={checkInTime}
                             onChange={(value) => {
-                                handleUpdateAvailableCapacity()
+                                handleUpdateAvailableCapacity();
                                 setCheckInTime(value);
                             }}
                             required
@@ -222,11 +234,11 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
                         <BasicTextFields
                             value={numberOfPersons}
                             handleChange={(e) => {
-                                const newNumber = parseInt(e.target.value)
-                                
-                                if(newNumber > availableCapacity) return
+                                const newNumber = parseInt(e.target.value);
 
-                                setNumberOfPersons(newNumber)
+                                if (newNumber > availableCapacity) return;
+
+                                setNumberOfPersons(newNumber);
                             }}
                             required
                             label={`How many persons? (${availableCapacity} capacities are available)`}
@@ -239,7 +251,7 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
                                 itemData={venues}
                                 title={venueCategory}
                                 handleOnSelected={(item) => {
-                                    handleUpdateAvailableCapacity()
+                                    handleUpdateAvailableCapacity();
                                     setVenue(item);
                                 }}
                                 selectedVenue={venue}
@@ -266,7 +278,6 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
                     </Grid>
                 </Grid>
             </form>
-            
         </div>
     );
 }

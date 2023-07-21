@@ -62,36 +62,43 @@ function MyReservation() {
     const username = useRef(JSON.parse(token).username);
 
     useEffect(() => {
-        getData(
-            `${RESERVATION_URL}/username?username=${username.current}`,
-            (res) => {
-                if (res) {
-                    const newTabs = defaultTabs.map((tab) => {
-                        const reservations = res.filter((reservation) =>
-                            tab.status.includes(reservation.status),
-                        );
+        const fecthData = () =>
+            getData(
+                `${RESERVATION_URL}/username?username=${username.current}`,
+                (res) => {
+                    if (res) {
+                        const newTabs = defaultTabs.map((tab) => {
+                            const reservations = res.filter((reservation) =>
+                                tab.status.includes(reservation.status),
+                            );
 
-                        const ChildrenComponent = () => {
-                            if (reservations.length === 0)
-                                return <Fragment></Fragment>;
+                            const ChildrenComponent = () => {
+                                if (reservations.length === 0)
+                                    return <Fragment></Fragment>;
 
-                            return reservations.map((reservation, index) => (
-                                <ReservationCard
-                                    key={index}
-                                    reservation={reservation}
-                                />
-                            ));
-                        };
+                                return reservations.map(
+                                    (reservation, index) => (
+                                        <ReservationCard
+                                            key={index}
+                                            reservation={reservation}
+                                            handleOnReservationChange={
+                                                fecthData
+                                            }
+                                        />
+                                    ),
+                                );
+                            };
 
-                        return {
-                            ...tab,
-                            children: <ChildrenComponent />,
-                        };
-                    });
-                    setTabs(newTabs);
-                }
-            },
-        );
+                            return {
+                                ...tab,
+                                children: <ChildrenComponent />,
+                            };
+                        });
+                        setTabs(newTabs);
+                    }
+                },
+            );
+        fecthData();
     }, []);
 
     return <LabTabs tabs={tabs} defaultTab={tabs[0]} />;

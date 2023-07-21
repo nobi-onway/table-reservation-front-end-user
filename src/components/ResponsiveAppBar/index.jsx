@@ -120,7 +120,7 @@ function ResponsiveAppBar() {
             }
 
             login(JSON.stringify(res));
-            navigate('/');
+            navigate('/reservation');
             setIsLoginModalOpen(false);
             toast.success('Login successfully', {
                 position: 'top-right',

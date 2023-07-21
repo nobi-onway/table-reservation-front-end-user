@@ -80,8 +80,8 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
     const [venueCategory, setVenueCategory] = useState('Indoor');
     const [venues, setVenues] = useState(itemData);
     const [venue, setVenue] = useState({});
-    const [date, setDate] = useState(dayjs(new Date()));
-    const [checkInTime, setCheckInTime] = useState(dayjs(new Date()));
+    const [date, setDate] = useState();
+    const [checkInTime, setCheckInTime] = useState();
     const [numberOfPersons, setNumberOfPersons] = useState(1);
     const [availableCapacity, setAvailableCapacity] = useState(0)
     const { token } = useContext(AuthContext);
@@ -90,8 +90,9 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
     const userRef = useRef(JSON.parse(token));
 
     const handleUpdateAvailableCapacity = useCallback(() => {
+        if(!date || !checkInTime) return
+
         getData(`${GET_CAPACITY_FROM_RESERVATION}?checkinDate=${date.format('YYYY-MM-DD')}&checkinTime=${checkInTime.format('HH:mm:ss')}&capacityMasterDataId=${venue.id}`, (res) => {
-            
             setNumberOfPersons(preState => preState > res ? res : preState)
             setAvailableCapacity(res)
         })
@@ -121,7 +122,6 @@ function TableForm({ handleOpenServiceForm, handleSuccessNotify, handleFailNotif
                 }));
                 venuesRef.current = newVenues;
                 handleUpdateVenues();
-                setVenue(newVenues[0]);
             }
         });
     }, [handleUpdateVenues]);

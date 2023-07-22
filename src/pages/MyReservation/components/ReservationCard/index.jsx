@@ -20,7 +20,7 @@ import ServicesMenuPopup from '../ServicesMenuPopup';
 import { postData } from '../../../../services/apiService';
 import { toast } from 'react-toastify';
 import CancelConfirmation from './components/CancelConfirmation';
-import { PayPalButtons } from '@paypal/react-paypal-js';
+import PaymentModal from './components/PaymentModal';
 const cx = classNames.bind(styles);
 
 const notifyMessage = {
@@ -32,6 +32,7 @@ function ReservationCard({ reservation, handleOnReservationChange }) {
     const [isOpenDishesMenu, setIsOpenDishesMenu] = useState(false);
     const [isOpenServicesMenu, setIsOpenServicesMenu] = useState(false);
     const [isOpenConfirmation, setIsOpenConfirmation] = useState(false);
+    const [isOpenPaymentModal, setIsOpenPaymentModal] = useState(false);
 
     const handleChangeReservationStatus = (status) => {
         postData(`/${reservation.reservationId}/${status}`, '', (res) => {
@@ -197,46 +198,20 @@ function ReservationCard({ reservation, handleOnReservationChange }) {
                             </span>
                             <div style={{ display: 'flex' }}>
                                 {reservation.status === 'pending deposit' && (
-                                    // <Button
-                                    //     style={{
-                                    //         fontSize: '1.2rem',
-                                    //         fontWeight: '700',
-                                    //     }}
-                                    //     size="large"
-                                    //     variant="contained"
-                                    //     startIcon={<PaidIcon />}
-                                    //     onClick={() =>
-                                    //         handleChangeReservationStatus(
-                                    //             'deposit',
-                                    //         )
-                                    //     }
-                                    // >
-                                    //     Deposit
-                                    // </Button>
-                                    <PayPalButtons
-                                        createOrder={(data, actions) => {
-                                            return actions.order.create({
-                                                purchase_units: [
-                                                    {
-                                                        amount: {
-                                                            value: Math.round(
-                                                                reservation.depositAmount,
-                                                            ),
-                                                        },
-                                                    },
-                                                ],
-                                            });
+                                    <Button
+                                        style={{
+                                            fontSize: '1.2rem',
+                                            fontWeight: '700',
                                         }}
-                                        onApprove={(data, actions) => {
-                                            return actions.order
-                                                .capture()
-                                                .then((details) => {
-                                                    handleChangeReservationStatus(
-                                                        'deposit',
-                                                    );
-                                                });
-                                        }}
-                                    />
+                                        size="large"
+                                        variant="contained"
+                                        startIcon={<PaidIcon />}
+                                        onClick={() =>
+                                            setIsOpenPaymentModal(true)
+                                        }
+                                    >
+                                        Deposit
+                                    </Button>
                                 )}
                                 {reservation.status !== 'done' &&
                                     reservation.status !== 'cancelled' && (
@@ -309,6 +284,15 @@ function ReservationCard({ reservation, handleOnReservationChange }) {
                     handleCancelReservation={() =>
                         handleChangeReservationStatus('cancel')
                     }
+                />
+            )}
+            {isOpenPaymentModal && (
+                <PaymentModal
+                    handleClosePayment={() => setIsOpenPaymentModal(false)}
+                    handlePayment={() =>
+                        handleChangeReservationStatus('deposit')
+                    }
+                    value={reservation.depositAmount}
                 />
             )}
         </Fragment>

@@ -308,18 +308,17 @@ function ResponsiveAppBar() {
                 </Container>
             </AppBar>
             {isLoginModalOpen && (
-                // <LoginModal
-                //     handleModalClose={() => {
-                //         navigate('/');
-                //         setIsLoginModalOpen(false);
-                //     }}
-                //     handleOpenSignUpModal={() => {
-                //         setIsSignUpModalOpen(true);
-                //         setIsLoginModalOpen(false);
-                //     }}
-                //     handleSignIn={handleSignIn}
-                // />
-                <CancelConfirmation />
+                <LoginModal
+                    handleModalClose={() => {
+                        navigate('/');
+                        setIsLoginModalOpen(false);
+                    }}
+                    handleOpenSignUpModal={() => {
+                        setIsSignUpModalOpen(true);
+                        setIsLoginModalOpen(false);
+                    }}
+                    handleSignIn={handleSignIn}
+                />
             )}
 
             {isSignUpModalOpen && (

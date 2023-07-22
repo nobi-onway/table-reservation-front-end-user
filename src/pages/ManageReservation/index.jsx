@@ -1,10 +1,8 @@
 import { Fragment, useEffect, useState } from 'react';
 import LabTabs from '../MyReservation/components/LabTabs';
-import ReservationCard from '../MyReservation/components/ReservationCard';
 import { getData } from '../../services/apiService';
 import { RESERVATION_URL } from '../../services/apiConstant';
-import { useContext, useRef } from 'react';
-import { AuthContext } from '../../store/Auth';
+import ManageReservationCard from './components/ManageReservationCard';
 
 const defaultTabs = [
     {
@@ -24,46 +22,12 @@ const defaultTabs = [
     },
 ];
 
-// const defaultReservations = [
-//     {
-//         imageUrl:
-//             'https://pvu.thebluebook.com/inc/img/qp/2214759/lrg_the-orchid-banquet-hall.jpg',
-//         createDate: '2023-06-03',
-//         checkinTime: '2023-06-12 17:00:00.0',
-//         venue: 'Cloudy Area',
-//         numberOfGuest: 22,
-//         serviceList: [],
-//         dishList: [],
-//         serviceAmount: 0,
-//         dishAmount: 958.56,
-//         depositAmount: 315.856,
-//         status: 'pending deposit',
-//     },
-//     {
-//         imageUrl:
-//             'https://pvu.thebluebook.com/inc/img/qp/2214759/lrg_the-orchid-banquet-hall.jpg',
-//         createDate: '2023-06-03',
-//         checkinTime: '2023-06-12 17:00:00.0',
-//         venue: 'Cloudy Area',
-//         numberOfGuest: 22,
-//         serviceList: [],
-//         dishList: [],
-//         serviceAmount: 0,
-//         dishAmount: 958.56,
-//         depositAmount: 315.856,
-//         status: 'pending deposit',
-//     },
-// ];
-
 function ManageReservation() {
-    const { token } = useContext(AuthContext);
     const [tabs, setTabs] = useState(defaultTabs);
-
-    const username = useRef(JSON.parse(token).username);
 
     useEffect(() => {
         getData(
-            `${RESERVATION_URL}/username?username=${username.current}`,
+            `${RESERVATION_URL}`,
             (res) => {
                 if (res) {
                     const newTabs = defaultTabs.map((tab) => {
@@ -76,7 +40,7 @@ function ManageReservation() {
                                 return <Fragment></Fragment>;
 
                             return reservations.map((reservation, index) => (
-                                <ReservationCard
+                                <ManageReservationCard
                                     key={index}
                                     reservation={reservation}
                                 />

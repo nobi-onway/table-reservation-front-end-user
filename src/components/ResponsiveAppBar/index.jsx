@@ -20,6 +20,7 @@ import { LOGIN_URL } from '../../services/apiConstant';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../store/Auth';
 import { toast } from 'react-toastify';
+import CancelConfirmation from '../../pages/MyReservation/components/ReservationCard/components/CancelConfirmation';
 
 const pages = [
     { name: 'HOME', path: '/' },
@@ -307,17 +308,18 @@ function ResponsiveAppBar() {
                 </Container>
             </AppBar>
             {isLoginModalOpen && (
-                <LoginModal
-                    handleModalClose={() => {
-                        navigate('/');
-                        setIsLoginModalOpen(false);
-                    }}
-                    handleOpenSignUpModal={() => {
-                        setIsSignUpModalOpen(true);
-                        setIsLoginModalOpen(false);
-                    }}
-                    handleSignIn={handleSignIn}
-                />
+                // <LoginModal
+                //     handleModalClose={() => {
+                //         navigate('/');
+                //         setIsLoginModalOpen(false);
+                //     }}
+                //     handleOpenSignUpModal={() => {
+                //         setIsSignUpModalOpen(true);
+                //         setIsLoginModalOpen(false);
+                //     }}
+                //     handleSignIn={handleSignIn}
+                // />
+                <CancelConfirmation />
             )}
 
             {isSignUpModalOpen && (

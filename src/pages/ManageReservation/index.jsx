@@ -26,9 +26,8 @@ function ManageReservation() {
     const [tabs, setTabs] = useState(defaultTabs);
 
     useEffect(() => {
-        getData(
-            `${RESERVATION_URL}`,
-            (res) => {
+        const fetchData = () =>
+            getData(`${RESERVATION_URL}`, (res) => {
                 if (res) {
                     const newTabs = defaultTabs.map((tab) => {
                         const reservations = res.filter((reservation) =>
@@ -43,6 +42,7 @@ function ManageReservation() {
                                 <ManageReservationCard
                                     key={index}
                                     reservation={reservation}
+                                    handleOnReservationChange={fetchData}
                                 />
                             ));
                         };
@@ -54,8 +54,9 @@ function ManageReservation() {
                     });
                     setTabs(newTabs);
                 }
-            },
-        );
+            });
+
+        fetchData();
     }, []);
 
     return <LabTabs tabs={tabs} defaultTab={tabs[0]} />;

@@ -18,6 +18,7 @@ import { useState, Fragment } from 'react';
 import DishesMenuPopup from '../../../MyReservation/components/DishesMenuPopup';
 import ServicesMenuPopup from '../../../MyReservation/components/ServicesMenuPopup';
 import { postData } from '../../../../services/apiService';
+import { toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 
 const notifyMessage = {
@@ -25,12 +26,18 @@ const notifyMessage = {
     'pending processing': 'Waiting for processing',
 };
 
-function ManageReservationCard({ reservation }) {
+function ManageReservationCard({ reservation, handleOnReservationChange }) {
     const [isOpenDishesMenu, setIsOpenDishesMenu] = useState(false);
     const [isOpenServicesMenu, setIsOpenServicesMenu] = useState(false);
 
     const handleChangeReservationStatus = (status) => {
-        postData(`/${reservation.reservationId}/${status}`, '', (res) => {});
+        postData(`/${reservation.reservationId}/${status}`, '', (res) => {
+            console.log(reservation, res);
+            if (res) {
+                toast.success(`You have ${status} successfully!`);
+                handleOnReservationChange();
+            }
+        });
     };
 
     const actionButton = {
@@ -55,27 +62,15 @@ function ManageReservationCard({ reservation }) {
                     style={{
                         fontSize: '1.2rem',
                         fontWeight: '700',
+                        background: 'green',
+                        color: 'white',
                     }}
                     size="large"
                     variant="contained"
                     startIcon={<CheckCircleIcon />}
-                    onClick={() => handleChangeReservationStatus('deposit')}
+                    disabled
                 >
-                    Approve
-                </Button>
-                <Button
-                    style={{
-                        backgroundColor: 'red',
-                        fontSize: '1.2rem',
-                        fontWeight: '700',
-                        marginLeft: '1rem',
-                    }}
-                    size="large"
-                    variant="contained"
-                    startIcon={<DeleteIcon />}
-                    onClick={() => handleChangeReservationStatus('cancel')}
-                >
-                    Cancel
+                    Deposit processing
                 </Button>
             </Fragment>
         ),
@@ -89,7 +84,7 @@ function ManageReservationCard({ reservation }) {
                     size="large"
                     variant="contained"
                     startIcon={<CheckCircleIcon />}
-                    onClick={() => handleChangeReservationStatus('deposit')}
+                    onClick={() => handleChangeReservationStatus('approve')}
                 >
                     Approve
                 </Button>
@@ -248,7 +243,9 @@ function ManageReservationCard({ reservation }) {
                                 <span className={`${cx('bold')} ${cx('m-4')}`}>
                                     Total estimate:
                                 </span>
-                                ${reservation.dishAmount}
+                                $
+                                {reservation.dishAmount +
+                                    reservation.serviceAmount}
                             </span>
                         </div>
                         <div className={`${cx('reservation-detail')}`}>

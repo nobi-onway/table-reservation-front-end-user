@@ -18,66 +18,26 @@ import { useState, Fragment } from 'react';
 import DishesMenuPopup from '../DishesMenuPopup';
 import ServicesMenuPopup from '../ServicesMenuPopup';
 import { postData } from '../../../../services/apiService';
+import { toast } from 'react-toastify';
 const cx = classNames.bind(styles);
-
-// const reservation = {
-//     imageUrl:
-//         'https://pvu.thebluebook.com/inc/img/qp/2214759/lrg_the-orchid-banquet-hall.jpg',
-//     createDate: '2023-06-03',
-//     checkinTime: '2023-06-12 17:00:00.0',
-//     venue: 'Cloudy Area',
-//     numberOfGuest: 22,
-//     serviceList: [
-//         {
-//             name: 'Calamari',
-//             totalPrice: 200,
-//         },
-//         {
-//             name: 'Hotdog Sandwich',
-//             totalPrice: 197.78,
-//         },
-//         {
-//             name: 'Mushroom Burger',
-//             totalPrice: 241.78,
-//         },
-//     ],
-//     dishList: [
-//         {
-//             name: 'Calamari',
-//             quantity: 20,
-//             totalPrice: 200,
-//         },
-//         {
-//             name: 'Hotdog Sandwich',
-//             quantity: 22,
-//             totalPrice: 197.78,
-//         },
-//         {
-//             name: 'Mushroom Burger',
-//             quantity: 22,
-//             totalPrice: 241.78,
-//         },
-//     ],
-//     serviceAmount: 0,
-//     dishAmount: 958.56,
-//     depositAmount: 315.856,
-//     status: 'pending deposit',
-// };
 
 const notifyMessage = {
     'pending deposit': 'Deposit to complete reservation',
     'pending processing': 'Waiting for processing',
 };
 
-function ReservationCard({ reservation }) {
+function ReservationCard({ reservation, handleOnReservationChange }) {
     const [isOpenDishesMenu, setIsOpenDishesMenu] = useState(false);
     const [isOpenServicesMenu, setIsOpenServicesMenu] = useState(false);
 
     const handleChangeReservationStatus = (status) => {
-        postData(`/${reservation.reservationId}/${status}`, "", (res) => {
-            
-        })
-    }
+        postData(`/${reservation.reservationId}/${status}`, '', (res) => {
+            if (res) {
+                toast.success(`You have ${status} successfully!`);
+                handleOnReservationChange();
+            }
+        });
+    };
 
     return (
         <Fragment>
@@ -240,27 +200,36 @@ function ReservationCard({ reservation }) {
                                         size="large"
                                         variant="contained"
                                         startIcon={<PaidIcon />}
-                                        onClick={() => handleChangeReservationStatus('deposit')}
+                                        onClick={() =>
+                                            handleChangeReservationStatus(
+                                                'deposit',
+                                            )
+                                        }
                                     >
                                         Deposit
                                     </Button>
                                 )}
-                                {reservation.status !== 'done' && reservation.status !== 'cancelled' && (
-                                    <Button
-                                        style={{
-                                            backgroundColor: 'red',
-                                            fontSize: '1.2rem',
-                                            fontWeight: '700',
-                                            marginLeft: '1rem',
-                                        }}
-                                        size="large"
-                                        variant="contained"
-                                        startIcon={<DeleteIcon />}
-                                        onClick={() => handleChangeReservationStatus('cancel')}
-                                    >
-                                        Cancel
-                                    </Button>
-                                )}
+                                {reservation.status !== 'done' &&
+                                    reservation.status !== 'cancelled' && (
+                                        <Button
+                                            style={{
+                                                backgroundColor: 'red',
+                                                fontSize: '1.2rem',
+                                                fontWeight: '700',
+                                                marginLeft: '1rem',
+                                            }}
+                                            size="large"
+                                            variant="contained"
+                                            startIcon={<DeleteIcon />}
+                                            onClick={() =>
+                                                handleChangeReservationStatus(
+                                                    'cancel',
+                                                )
+                                            }
+                                        >
+                                            Cancel
+                                        </Button>
+                                    )}
                                 {reservation.status === 'done' && (
                                     <Button
                                         style={{

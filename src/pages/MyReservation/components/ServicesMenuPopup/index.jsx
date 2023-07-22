@@ -34,7 +34,7 @@ function ServicesMenuPopup({ services, handleClosePopup }) {
                     </Grid>
                 </Grid>
 
-                <Grid container style={{overflowY: 'scroll'}}>
+                <Grid container style={{overflowY: 'scroll', maxHeight: '240px'}}>
                     {services.map((service) => (
                         <Fragment>
                             <Grid

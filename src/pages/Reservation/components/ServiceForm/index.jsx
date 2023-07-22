@@ -40,7 +40,7 @@ const defaultDishes = [
     },
 ];
 
-function ServiceForm({ handleCloseServiceForm, reservatioId }) {
+function ServiceForm({ handleCloseServiceForm, reservationId }) {
     const [dishesMenu, setDishesMenu] = useState(defaultDishes);
     const [serviceMenu, setServiceMenu] = useState(defaultServices);
 
@@ -71,17 +71,17 @@ function ServiceForm({ handleCloseServiceForm, reservatioId }) {
             quantity: dish.quantity,
         }));
 
-        postData(`${reservatioId}/${ORDER_DISHES_URL}`, dishes, (res) => {
+        postData(`/${reservationId}${ORDER_DISHES_URL}`, dishes, (res) => {
+            console.log(res);
             if (res) toast.success('Making order dishes successfully!');
         });
     };
 
     const handleOrderService = () => {
-        const services = selectedServices.map((service) => ({
-            serviceId: service.serviceId,
-        }));
+        const services = selectedServices.map((service) => service.serviceId);
 
-        postData(`${reservatioId}/${ORDER_SERVICE_URL}`, services, (res) => {
+        postData(`/${reservationId}${ORDER_SERVICE_URL}`, services, (res) => {
+            console.log(res);
             if (res) toast.success('Making order services successfully!');
         });
     };

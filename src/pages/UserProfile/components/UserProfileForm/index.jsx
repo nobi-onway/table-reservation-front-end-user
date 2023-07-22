@@ -73,7 +73,7 @@ function UserProfileForm()
                     <Grid item sm={12} md={12}>
                         <BasicTextFields
                             value={email}
-                            handleChange={(e) => setPhone(e.target.value)}
+                            handleChange={(e) => setEmail(e.target.value)}
                             required
                             label="Email"
                             type="email"

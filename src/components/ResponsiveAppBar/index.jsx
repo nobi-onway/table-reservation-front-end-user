@@ -88,7 +88,7 @@ function ResponsiveAppBar() {
 
         setAvatar(() =>
             token
-                ? JSON.parse(token).username == 'staff'
+                ? JSON.parse(token).username === 'staff'
                     ? staffAvatar
                     : userAvatar
                 : guestAvatar,
@@ -121,7 +121,7 @@ function ResponsiveAppBar() {
             }
 
             login(JSON.stringify(res));
-            navigate('/');
+            navigate('/reservation');
             setIsLoginModalOpen(false);
             toast.success('Login successfully', {
                 position: 'top-right',

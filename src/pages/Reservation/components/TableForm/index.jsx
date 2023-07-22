@@ -93,23 +93,26 @@ function TableForm({
     const venuesRef = useRef([]);
     const userRef = useRef(JSON.parse(token));
 
-    const handleUpdateAvailableCapacity = useCallback(() => {
-        if (!date || !checkInTime || !venue.id) return;
+    const handleUpdateAvailableCapacity = useCallback(
+        (date, checkInTime, venue) => {
+            if (!date || !checkInTime || !venue.id) return;
 
-        getData(
-            `${GET_CAPACITY_FROM_RESERVATION}?checkinDate=${date.format(
-                'YYYY-MM-DD',
-            )}&checkinTime=${checkInTime.format(
-                'HH:mm:ss',
-            )}&capacityMasterDataId=${venue.id}`,
-            (res) => {
-                setNumberOfPersons((preState) =>
-                    preState > res ? res : preState,
-                );
-                setAvailableCapacity(res);
-            },
-        );
-    }, [checkInTime, date, venue]);
+            getData(
+                `${GET_CAPACITY_FROM_RESERVATION}?checkinDate=${date.format(
+                    'YYYY-MM-DD',
+                )}&checkinTime=${checkInTime.format(
+                    'HH:mm:ss',
+                )}&capacityMasterDataId=${venue.id}`,
+                (res) => {
+                    setNumberOfPersons((preState) =>
+                        preState > res ? res : preState,
+                    );
+                    setAvailableCapacity(res);
+                },
+            );
+        },
+        [checkInTime, date, venue],
+    );
 
     const handleUpdateVenues = useCallback(() => {
         const newVenues = venuesRef.current.filter(
@@ -209,7 +212,11 @@ function TableForm({
                             <DatePicker
                                 value={date}
                                 onChange={(value) => {
-                                    handleUpdateAvailableCapacity();
+                                    handleUpdateAvailableCapacity(
+                                        value,
+                                        checkInTime,
+                                        venue,
+                                    );
                                     setDate(value);
                                 }}
                                 sx={{ width: '100%' }}
@@ -220,7 +227,11 @@ function TableForm({
                         <TimePickerValue
                             value={checkInTime}
                             onChange={(value) => {
-                                handleUpdateAvailableCapacity();
+                                handleUpdateAvailableCapacity(
+                                    date,
+                                    value,
+                                    venue,
+                                );
                                 setCheckInTime(value);
                             }}
                             required
@@ -251,7 +262,11 @@ function TableForm({
                                 itemData={venues}
                                 title={venueCategory}
                                 handleOnSelected={(item) => {
-                                    handleUpdateAvailableCapacity();
+                                    handleUpdateAvailableCapacity(
+                                        date,
+                                        checkInTime,
+                                        item,
+                                    );
                                     setVenue(item);
                                 }}
                                 selectedVenue={venue}

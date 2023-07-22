@@ -121,7 +121,9 @@ function ResponsiveAppBar() {
             }
 
             login(JSON.stringify(res));
-            navigate('/reservation');
+            const route =
+                res.username == 'staff' ? '/staff-reservation' : '/reservation';
+            navigate(route);
             setIsLoginModalOpen(false);
             toast.success('Login successfully', {
                 position: 'top-right',

@@ -150,7 +150,9 @@ function ReservationCard({ reservation, handleOnReservationChange }) {
                                 <span className={`${cx('bold')} ${cx('m-4')}`}>
                                     Total estimate:
                                 </span>
-                                ${reservation.dishAmount}
+                                $
+                                {reservation.dishAmount +
+                                    reservation.serviceAmount}
                             </span>
                         </div>
                         <div className={`${cx('reservation-detail')}`}>

@@ -20,6 +20,7 @@ import ServicesMenuPopup from '../ServicesMenuPopup';
 import { postData } from '../../../../services/apiService';
 import { toast } from 'react-toastify';
 import CancelConfirmation from './components/CancelConfirmation';
+import { PayPalButtons } from '@paypal/react-paypal-js';
 const cx = classNames.bind(styles);
 
 const notifyMessage = {
@@ -196,22 +197,46 @@ function ReservationCard({ reservation, handleOnReservationChange }) {
                             </span>
                             <div style={{ display: 'flex' }}>
                                 {reservation.status === 'pending deposit' && (
-                                    <Button
-                                        style={{
-                                            fontSize: '1.2rem',
-                                            fontWeight: '700',
+                                    // <Button
+                                    //     style={{
+                                    //         fontSize: '1.2rem',
+                                    //         fontWeight: '700',
+                                    //     }}
+                                    //     size="large"
+                                    //     variant="contained"
+                                    //     startIcon={<PaidIcon />}
+                                    //     onClick={() =>
+                                    //         handleChangeReservationStatus(
+                                    //             'deposit',
+                                    //         )
+                                    //     }
+                                    // >
+                                    //     Deposit
+                                    // </Button>
+                                    <PayPalButtons
+                                        createOrder={(data, actions) => {
+                                            return actions.order.create({
+                                                purchase_units: [
+                                                    {
+                                                        amount: {
+                                                            value: Math.round(
+                                                                reservation.depositAmount,
+                                                            ),
+                                                        },
+                                                    },
+                                                ],
+                                            });
                                         }}
-                                        size="large"
-                                        variant="contained"
-                                        startIcon={<PaidIcon />}
-                                        onClick={() =>
-                                            handleChangeReservationStatus(
-                                                'deposit',
-                                            )
-                                        }
-                                    >
-                                        Deposit
-                                    </Button>
+                                        onApprove={(data, actions) => {
+                                            return actions.order
+                                                .capture()
+                                                .then((details) => {
+                                                    handleChangeReservationStatus(
+                                                        'deposit',
+                                                    );
+                                                });
+                                        }}
+                                    />
                                 )}
                                 {reservation.status !== 'done' &&
                                     reservation.status !== 'cancelled' && (

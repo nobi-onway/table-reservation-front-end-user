@@ -20,6 +20,7 @@ import { LOGIN_URL } from '../../services/apiConstant';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../store/Auth';
 import { toast } from 'react-toastify';
+import CancelConfirmation from '../../pages/MyReservation/components/ReservationCard/components/CancelConfirmation';
 
 const pages = [
     { name: 'HOME', path: '/' },

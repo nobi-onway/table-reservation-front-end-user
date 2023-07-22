@@ -1,6 +1,6 @@
 # Table Reservation Project
 
-This is the backend repository for the Table Reservation Project. 
+This is the all references for the Table Reservation Project. 
 
 ## Links
 

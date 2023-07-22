@@ -19,6 +19,7 @@ import DishesMenuPopup from '../DishesMenuPopup';
 import ServicesMenuPopup from '../ServicesMenuPopup';
 import { postData } from '../../../../services/apiService';
 import { toast } from 'react-toastify';
+import CancelConfirmation from './components/CancelConfirmation';
 const cx = classNames.bind(styles);
 
 const notifyMessage = {
@@ -29,6 +30,7 @@ const notifyMessage = {
 function ReservationCard({ reservation, handleOnReservationChange }) {
     const [isOpenDishesMenu, setIsOpenDishesMenu] = useState(false);
     const [isOpenServicesMenu, setIsOpenServicesMenu] = useState(false);
+    const [isOpenConfirmation, setIsOpenConfirmation] = useState(false);
 
     const handleChangeReservationStatus = (status) => {
         postData(`/${reservation.reservationId}/${status}`, '', (res) => {
@@ -222,9 +224,7 @@ function ReservationCard({ reservation, handleOnReservationChange }) {
                                             variant="contained"
                                             startIcon={<DeleteIcon />}
                                             onClick={() =>
-                                                handleChangeReservationStatus(
-                                                    'cancel',
-                                                )
+                                                setIsOpenConfirmation(true)
                                             }
                                         >
                                             Cancel
@@ -274,6 +274,14 @@ function ReservationCard({ reservation, handleOnReservationChange }) {
                 <ServicesMenuPopup
                     services={reservation.serviceList}
                     handleClosePopup={() => setIsOpenServicesMenu(false)}
+                />
+            )}
+            {isOpenConfirmation && (
+                <CancelConfirmation
+                    handleCloseConfirmation={() => setIsOpenConfirmation(false)}
+                    handleCancelReservation={() =>
+                        handleChangeReservationStatus('cancel')
+                    }
                 />
             )}
         </Fragment>
